@@ -22,4 +22,6 @@ abstract class Command[T <: Args: Manifest] extends Serializable with Logging {
   def run(args: String*): Unit = run(args.toArray)
 
   def run(args: T): Unit
+
+  def main(args: Array[String]): Unit = run(args)
 }

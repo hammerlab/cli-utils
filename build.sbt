@@ -1,9 +1,9 @@
 name := "spark-commands"
-version := "1.0.0"
+version := "1.0.1"
 
 providedDeps += libraries.value('spark)
 
 libraryDependencies ++= Seq(
-  "org.clapper" %% "grizzled-slf4j" % "1.0.3",
-  "org.bdgenomics.utils" %% "utils-cli" % "0.2.10"
+  libraries.value('slf4j),
+  libraries.value('bdg_utils_cli)
 )
