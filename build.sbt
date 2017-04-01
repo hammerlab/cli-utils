@@ -1,9 +1,9 @@
 name := "spark-commands"
-version := "1.0.1"
+version := "1.0.2-SNAPSHOT"
 
-providedDeps += libraries.value('spark)
+providedDeps += libs.value('spark)
 
-libraryDependencies ++= Seq(
-  libraries.value('slf4j),
-  libraries.value('bdg_utils_cli)
+deps ++= Seq(
+  libs.value('bdg_utils_cli),
+  libs.value('slf4j)
 )
