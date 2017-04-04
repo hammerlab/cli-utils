@@ -1,5 +1,5 @@
 name := "spark-commands"
-version := "1.0.3-SNAPSHOT"
+version := "1.0.3"
 
 providedDeps += libs.value('spark)
 
