@@ -6,7 +6,10 @@ import org.bdgenomics.utils.cli.Args4j
 /**
  * Interface for running a command from command line arguments.
  */
-abstract class Command[T <: Args: Manifest] extends Serializable with Logging {
+abstract class Command[T <: Args: Manifest]
+  extends Serializable
+    with Logging {
+
   /** The name of the command, as it will be specified on the command line. */
   def name: String
 
@@ -23,5 +26,8 @@ abstract class Command[T <: Args: Manifest] extends Serializable with Logging {
 
   def run(args: T): Unit
 
-  def main(args: Array[String]): Unit = run(args)
+  def main(args: Array[String]): Unit = {
+    FileSystems.load()
+    run(args)
+  }
 }
