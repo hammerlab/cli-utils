@@ -26,8 +26,6 @@ abstract class Command[T <: Args: Manifest]
 
   def run(args: T): Unit
 
-  def main(args: Array[String]): Unit = {
-    FileSystems.load()
+  def main(args: Array[String]): Unit =
     run(args)
-  }
 }
