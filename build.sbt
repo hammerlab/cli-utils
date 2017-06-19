@@ -1,7 +1,7 @@
 name := "spark-commands"
-version := "1.0.4-SNAPSHOT"
+version := "1.0.4"
 
-providedDeps += libs.value('spark)
+providedDeps += spark.value
 
 deps ++= Seq(
   libs.value('bdg_utils_cli),
