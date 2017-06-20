@@ -4,7 +4,9 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable
 
-abstract class SparkCommand[T <: Args: Manifest] extends Command[T] {
+abstract class SparkCommand[T <: Args: Manifest]
+  extends Command[T] {
+
   override def run(args: T): Unit = {
     val sc = createSparkContext()
     try {
