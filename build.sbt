@@ -1,9 +1,9 @@
 name := "spark-commands"
-version := "1.0.4"
+version := "1.0.5-SNAPSHOT"
 
-providedDeps += spark.value
+providedDeps += spark
 
 deps ++= Seq(
-  libs.value('bdg_utils_cli),
-  libs.value('slf4j)
+  bdg_utils_cli % "0.2.15",
+  slf4j
 )
