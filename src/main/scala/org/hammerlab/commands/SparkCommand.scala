@@ -1,6 +1,7 @@
 package org.hammerlab.commands
 
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.{ SparkConf, SparkContext }
+import org.hammerlab.spark.Conf
 
 import scala.collection.mutable
 
@@ -33,7 +34,7 @@ abstract class SparkCommand[T <: Args: Manifest]
    * @return
    */
   private def createSparkContext(): SparkContext = {
-    val config: SparkConf = new SparkConf()
+    val config: SparkConf = Conf()
 
     config.getOption("spark.app.name") match {
       case Some(cmdLineName) => config.setAppName(s"$cmdLineName: $name")
