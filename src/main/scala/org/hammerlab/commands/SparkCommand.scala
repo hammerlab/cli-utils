@@ -1,12 +1,14 @@
 package org.hammerlab.commands
 
+import org.apache.spark.serializer.KryoRegistrator
 import org.apache.spark.{ SparkConf, SparkContext }
-import org.hammerlab.spark.Conf
+import org.hammerlab.spark.{ Conf, SparkConfBase }
 
 import scala.collection.mutable
 
 abstract class SparkCommand[T <: Args: Manifest]
-  extends Command[T] {
+  extends Command[T]
+    with SparkConfBase {
 
   override def run(args: T): Unit = {
     val sc = createSparkContext()
@@ -25,7 +27,22 @@ abstract class SparkCommand[T <: Args: Manifest]
     defaultConfs.update(key, value)
   }
 
-  def defaultRegistrar: String = ""
+  def registrar: Class[_ <: KryoRegistrator] = null
+
+  sparkConf(
+    "spark.master" → "local[*]",
+    "spark.serializer" → "org.apache.spark.serializer.KryoSerializer",
+    "spark.kryoserializer.buffer" → "4mb",
+    "spark.kryo.referenceTracking" → "true",
+    "spark.kryo.registrationRequired" → "true"
+  )
+
+  Option(registrar).foreach(
+    clz ⇒
+      sparkConf(
+        "spark.kryo.registrator" → clz.getCanonicalName
+      )
+  )
 
   /**
    * Return a spark context.
@@ -34,45 +51,13 @@ abstract class SparkCommand[T <: Args: Manifest]
    * @return
    */
   private def createSparkContext(): SparkContext = {
-    val config: SparkConf = Conf()
+    val conf = makeSparkConf
 
-    config.getOption("spark.app.name") match {
-      case Some(cmdLineName) => config.setAppName(s"$cmdLineName: $name")
-      case _ => config.setAppName(name)
+    conf.getOption("spark.app.name") match {
+      case Some(cmdLineName) => conf.setAppName(s"$cmdLineName: $name")
+      case _ => conf.setAppName(name)
     }
 
-    if (config.getOption("spark.master").isEmpty) {
-      val numProcessors = Runtime.getRuntime.availableProcessors()
-      config.setMaster(s"local[$numProcessors]")
-      info(s"Running in local mode with $numProcessors 'executors'")
-    }
-
-    if (config.getOption("spark.serializer").isEmpty) {
-      config.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-    }
-
-    if (config.getOption("spark.kryo.registrator").isEmpty && defaultRegistrar.nonEmpty) {
-      config.set("spark.kryo.registrator", defaultRegistrar)
-    }
-
-    if (config.getOption("spark.kryoserializer.buffer").isEmpty) {
-      config.set("spark.kryoserializer.buffer", "4mb")
-    }
-
-    if (config.getOption("spark.kryo.referenceTracking").isEmpty) {
-      config.set("spark.kryo.referenceTracking", "true")
-    }
-
-    if (config.getOption("spark.kryo.registrationRequired").isEmpty) {
-      config.set("spark.kryo.registrationRequired", "true")
-    }
-
-    for {
-      (k, v) <- defaultConfs
-    } {
-      config.set(k, v)
-    }
-
-    new SparkContext(config)
+    new SparkContext(conf)
   }
 }

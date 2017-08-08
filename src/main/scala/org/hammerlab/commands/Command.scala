@@ -21,7 +21,12 @@ abstract class Command[T <: Args: Manifest]
    *
    * @param args the command line arguments.
    */
-  def run(args: Array[String]): Unit = run(Args4j[T](args))
+  def run(args: Array[String]): Unit =
+    Args4j[T](args) match {
+      case Left(args) ⇒ run(args)
+      case _ ⇒
+    }
+
   def run(args: String*): Unit = run(args.toArray)
 
   def run(args: T): Unit
