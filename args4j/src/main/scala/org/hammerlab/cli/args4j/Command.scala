@@ -1,4 +1,4 @@
-package org.hammerlab.commands
+package org.hammerlab.cli.args4j
 
 import grizzled.slf4j.Logging
 import org.bdgenomics.utils.cli.Args4j

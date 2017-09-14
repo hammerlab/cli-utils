@@ -1,4 +1,4 @@
-package org.hammerlab.commands
+package org.hammerlab.cli.args4j
 
 import com.esotericsoftware.kryo.Kryo
 import org.apache.spark.SparkContext
@@ -11,11 +11,19 @@ class SparkCommandTest
   extends Suite {
   test("command") {
     val outFile = tmpPath()
-    TestCommand.main(Array(outFile.toString()))
-    outFile.lines.toList should be(
+
+    TestCommand.main(
+      Array(
+        outFile.toString
+      )
+    )
+
+    outFile
+      .lines
+      .toList should be(
       List(
         "8mb",
-        "org.hammerlab.commands.TestRegistrar"
+        "org.hammerlab.cli.args4j.TestRegistrar"
       )
     )
   }
@@ -32,15 +40,18 @@ class TestRegistrar
   override def registerClasses(kryo: Kryo): Unit = {}
 }
 
+import org.hammerlab.spark.test.suite.TestConfs
+
 object TestCommand
-  extends SparkCommand[TestArgs] {
+  extends SparkCommand[TestArgs]
+    with TestConfs {
+
   override def name: String = "test"
   override def description: String = "test command"
 
   sparkConf(
     "spark.kryoserializer.buffer" → "8mb"
   )
-
 
   override def registrar = classOf[TestRegistrar]
 
