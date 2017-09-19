@@ -8,6 +8,7 @@ import org.apache.spark.serializer.KryoRegistrator
 import org.hammerlab.cli.args.OutputArgs
 import org.hammerlab.hadoop.Configuration
 import org.hammerlab.io.{ Printer, SampleSize }
+import org.hammerlab.paths.Path
 import org.hammerlab.spark.{ SparkConfBase, confs }
 
 trait SparkPathAppArgs {
@@ -31,7 +32,15 @@ trait SparkApp[Args]
   implicit def sc: SparkContext = {
     if (_sc == null) {
       info("Creating SparkContext")
-      _sc = new SparkContext(makeSparkConf)
+      val conf = makeSparkConf
+      if (
+        conf.get("spark.eventLog.enabled", "true") == "true" &&
+          conf.get("spark.eventLog.dir", "") == "" &&
+          !Path("/tmp/spark-events").exists) {
+        conf.set("spark.eventLog.enabled", "false")
+        warn("Disabling event-logging because default destination /tmp/spark-events doesn't exist")
+      }
+      _sc = new SparkContext(conf)
     }
     _sc
   }

@@ -1,10 +1,4 @@
 
-lazy val cli =
-  rootProject(
-    args4j,
-    case_app
-  )
-
 val defaults = Seq(
   organization := "org.hammerlab.cli",
   deps ++= Seq(
@@ -30,3 +24,10 @@ lazy val case_app = project.settings(
     paths % "1.2.0"
   )
 )
+
+lazy val cli_root =
+  rootProject(
+    "cli-root",
+    args4j,
+    case_app
+  )
