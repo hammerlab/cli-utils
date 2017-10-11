@@ -2,36 +2,49 @@ package org.hammerlab.cli.app
 
 import caseapp.Recurse
 import org.hammerlab.cli.args.OutputArgs
-import org.hammerlab.spark.test.suite.MainSuite
-import org.hammerlab.test.Suite
+import org.hammerlab.kryo.spark.Registrar
 
 class SparkPathAppTest
-  extends MainSuite {
+  extends MainSuite(SumNumbersSpark) {
+
+  /**
+   * Test dummy [[SumNumbersSpark]] app below, which prints the sum of some numbers as well as its
+   * [[org.apache.spark.serializer.KryoRegistrator]].
+   */
   test("SumNumbersSpark") {
-    val out = tmpPath()
-    SumNumbersSpark.main(
-      Array(
-        path("numbers").toString,
-        "-o", out.toString
-      )
+    check(
+      path("numbers")
+    )(
+      """55
+        |org.hammerlab.cli.app.Reg
+        |"""
     )
-    out.read should be("55\n")
   }
 }
 
 case class SparkArgs(@Recurse output: OutputArgs)
   extends SparkPathAppArgs
 
+object Foo
+
+class Reg extends Registrar(Foo.getClass)
+
 object SumNumbersSpark
-  extends SparkPathApp[SparkArgs] {
+  extends SparkPathApp[SparkArgs, Reg] {
   override protected def run(options: SparkArgs): Unit = {
-    import org.hammerlab.io.Printer._
     import cats.implicits.catsStdShowForInt
+    import org.hammerlab.io.Printer._
     echo(
       sc
         .textFile(path.toString)
         .map(_.toInt)
-        .reduce(_ + _)
+        .reduce(_ + _),
+      sc
+        .getConf
+        .get(
+          "spark.kryo.registrator",
+          ""
+        )
     )
   }
 }

@@ -8,8 +8,13 @@ import org.apache.spark.serializer.KryoRegistrator
 import org.hammerlab.cli.args.OutputArgs
 import org.hammerlab.hadoop.Configuration
 import org.hammerlab.io.{ Printer, SampleSize }
+import org.hammerlab.kryo.Registration
+import org.hammerlab.kryo.spark.Registrator
 import org.hammerlab.paths.Path
+import org.hammerlab.spark.confs.Kryo
 import org.hammerlab.spark.{ SparkConfBase, confs }
+
+import scala.reflect.ClassTag
 
 trait SparkPathAppArgs {
   def output: OutputArgs
@@ -57,12 +62,40 @@ trait SparkApp[Args]
 }
 
 /**
+ * Type-class representing types that can be passed as the `Reg` type-parameter to [[SparkPathApp]]: all
+ * [[KryoRegistrator]] subclasses as well as a default/no-op [[Nothing]] implementation.
+ */
+trait IsRegistrar[T] {
+  def apply(container: confs.Kryo): Unit
+}
+
+object IsRegistrar {
+  // Default/No-op
+  implicit val nothing: IsRegistrar[Nothing] =
+    new IsRegistrar[Nothing] {
+      override def apply(container: Kryo): Unit = {}
+    }
+
+  /**
+   * Wrap any [[KryoRegistrator]] for use with [[SparkPathApp]]
+   */
+  implicit def registrator[T <: KryoRegistrator: ClassTag]: IsRegistrar[T] =
+    new IsRegistrar[T] {
+      override def apply(container: Kryo): Unit =
+        container.registrar(implicitly[ClassTag[T]])
+    }
+}
+
+/**
  * [[SparkApp]] that takes an input path and prints some information to stdout or a path, with optional truncation of
  * such output.
  */
-abstract class SparkPathApp[Args <: SparkPathAppArgs : Parser : Messages](override val registrar: Class[_ <: KryoRegistrator] = null)
+abstract class SparkPathApp[Args <: SparkPathAppArgs : Parser : Messages, Reg: IsRegistrar]
   extends PathApp[Args]
-    with SparkApp[Args] {
+    with SparkApp[Args]
+    with confs.Kryo {
+
+  implicitly[IsRegistrar[Reg]].apply(this)
 
   @transient implicit var printer: Printer = _
   @transient implicit var printLimit: SampleSize = _
