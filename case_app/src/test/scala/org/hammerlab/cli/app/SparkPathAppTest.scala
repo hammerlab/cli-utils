@@ -1,11 +1,13 @@
 package org.hammerlab.cli.app
 
 import caseapp.Recurse
+import org.hammerlab.cli.app.Concrete.CApp
 import org.hammerlab.cli.args.OutputArgs
 import org.hammerlab.kryo.spark.Registrar
+import org.hammerlab.test.Suite
 
 class SparkPathAppTest
-  extends MainSuite(SumNumbersSpark) {
+  extends MainSuite(SumNumsApp) {
 
   /**
    * Test dummy [[SumNumbersSpark]] app below, which prints the sum of some numbers as well as its
@@ -22,16 +24,17 @@ class SparkPathAppTest
   }
 }
 
+import Apps._
+
 case class SparkArgs(@Recurse output: OutputArgs)
-  extends SparkPathAppArgs
+  extends PathAppArgs
 
 object Foo
 
 class Reg extends Registrar(Foo.getClass)
 
-object SumNumbersSpark
-  extends SparkPathApp[SparkArgs, Reg] {
-  override protected def run(options: SparkArgs): Unit = {
+case class SumNumbersSpark(implicit override val args: Args[SparkArgs])
+  extends SparkPathApp[SparkArgs, Reg]() {
     import cats.implicits.catsStdShowForInt
     import org.hammerlab.io.Printer._
     echo(
@@ -46,5 +49,33 @@ object SumNumbersSpark
           ""
         )
     )
+}
+
+object SumNumsApp extends CApp[SparkArgs, SumNumbersSpark](SumNumbersSpark()(_))
+
+case class NoRegApp(implicit override val args: Args[SparkArgs])
+  extends Apps.SparkPathApp[SparkArgs, Nothing]() {
+  // no-op
+  import org.hammerlab.io.Printer._
+  echo("woo")
+}
+
+object NoRegAp extends CApp[SparkArgs, NoRegApp](NoRegApp()(_))
+
+class SparkPathAppErrorTest extends Suite {
+  test("main") {
+    val outPath = tmpPath()
+    outPath.write("abc")
+
+    // Try to run against a path that already exists
+    intercept[IllegalArgumentException] {
+      NoRegAp.main(
+        Array(
+          "-o", outPath.toString,
+          path("numbers").toString
+        )
+      )
+    }.getMessage should fullyMatch regex("""Output path .* exists and overwrite \(-f\) not set""".r)
   }
 }
+

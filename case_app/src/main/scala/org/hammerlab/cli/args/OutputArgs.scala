@@ -1,6 +1,7 @@
 package org.hammerlab.cli.args
 
 import caseapp.{ ValueDescription, ExtraName ⇒ O, HelpMessage ⇒ M }
+import org.hammerlab.cli.app.Apps.OutPathOpts
 import org.hammerlab.io.SampleSize
 import org.hammerlab.paths.Path
 
@@ -13,9 +14,10 @@ case class OutputArgs(
   @O("o")
   @ValueDescription("path")
   @M("Print output to this file, otherwise to stdout")
-  outputPath: Option[Path] = None,
+  outPath: Option[Path] = None,
 
   @O("f")
   @M("Whether to overwrite the output file, if it already exists")
   overwrite: Boolean = false
 )
+  extends OutPathOpts

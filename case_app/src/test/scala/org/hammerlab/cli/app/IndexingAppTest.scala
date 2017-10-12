@@ -1,9 +1,11 @@
 package org.hammerlab.cli.app
 
 import caseapp.{ AppName, ExtraName ⇒ O }
+import org.hammerlab.cli.app.Apps.IndexingApp
 import org.hammerlab.paths.Path
 import org.hammerlab.test.Suite
 
+/*
 class IndexingAppTest
   extends Suite {
   test("SumNumbers") {
@@ -34,3 +36,4 @@ object SumNumbers
     )
   }
 }
+*/

@@ -16,21 +16,22 @@ trait OutPathArgs {
  * @param defaultSuffix if [[OutPathArgs.out]] is empty, construct an output path by appending this string to the argument
  *                      value [[PathApp.path]].
  */
+/*
 abstract class IndexingApp[Args <: OutPathArgs : Parser : Messages](defaultSuffix: String)
   extends PathApp[Args] {
-  implicit var printer: Printer = _
-
-  override def init(options: Args): Unit = {
-    printer =
-      Printer(
-        options
+  override def init(args: Args): Unit = {
+    new PrinterApp(args) {
+      override def outPath(args: Args) =
+        args
           .out
           .getOrElse(
             path + defaultSuffix
           )
-      )
+
+    }
   }
 
   override def close(): Unit =
     printer.close()
 }
+*/

@@ -15,6 +15,7 @@ abstract class MainSuite(app: CaseApp[_])
   def extraOpts: Seq[Arg] = Nil
   def defaultArgs(outPath: Path): Seq[Arg] = Nil
 
+  // TODO: move out of tests
   case class Arg(override val toString: String)
   implicit def strArg(s: String): Arg = Arg(s)
   implicit def pathArg(path: Path): Arg = Arg(path.toString)
