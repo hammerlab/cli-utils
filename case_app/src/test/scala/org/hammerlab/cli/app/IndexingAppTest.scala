@@ -1,16 +1,14 @@
 package org.hammerlab.cli.app
 
 import caseapp.{ AppName, ExtraName ⇒ O }
-import org.hammerlab.cli.app.Apps.IndexingApp
 import org.hammerlab.paths.Path
 import org.hammerlab.test.Suite
 
-/*
 class IndexingAppTest
   extends Suite {
   test("SumNumbers") {
     val in = fileCopy(path("numbers"), tmpPath())
-    SumNumbers.main(
+    SumNumbersApp.main(
       Array(
         in.toString()
       )
@@ -19,21 +17,20 @@ class IndexingAppTest
   }
 }
 
-@AppName("Add up numbers from an input file, write result to a sibling file with extension '.sum'")
-case class Args(@O("o") out: Option[Path] = None)
-  extends OutPathArgs
+//@AppName("Add up numbers from an input file, write result to a sibling file with extension '.sum'")
+//case class Opts(@O("o") out: Option[Path] = None)
+//  extends OutPathArgs
 
-object SumNumbers
-  extends IndexingApp[Args](".sum") {
-  override protected def run(options: Args): Unit = {
-    import org.hammerlab.io.Printer._
-    import cats.implicits.catsStdShowForInt
-    echo(
-      path
-        .lines
-        .map(_.toInt)
-        .sum
-    )
-  }
+case class SumNumbers(args: Args[SparkArgs])
+  extends IndexingApp(".sum", args) {
+  import org.hammerlab.io.Printer._
+  import cats.implicits.catsStdShowForInt
+  echo(
+    path
+      .lines
+      .map(_.toInt)
+      .sum
+  )
 }
-*/
+
+object SumNumbersApp extends CApp[SparkArgs, SumNumbers](SumNumbers)

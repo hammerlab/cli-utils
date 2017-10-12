@@ -1,7 +1,6 @@
 package org.hammerlab.cli.app
 
 import caseapp.Recurse
-import org.hammerlab.cli.app.Concrete.CApp
 import org.hammerlab.cli.args.OutputArgs
 import org.hammerlab.kryo.spark.Registrar
 import org.hammerlab.test.Suite
@@ -24,17 +23,17 @@ class SparkPathAppTest
   }
 }
 
-import Apps._
 
 case class SparkArgs(@Recurse output: OutputArgs)
   extends PathAppArgs
 
 object Foo
 
+/** Dummy registrar that only registers [[Foo]] above */
 class Reg extends Registrar(Foo.getClass)
 
-case class SumNumbersSpark(implicit override val args: Args[SparkArgs])
-  extends SparkPathApp[SparkArgs, Reg]() {
+case class SumNumbersSpark(args: Args[SparkArgs])
+  extends SparkPathApp[SparkArgs, Reg](args) {
     import cats.implicits.catsStdShowForInt
     import org.hammerlab.io.Printer._
     echo(
@@ -51,16 +50,16 @@ case class SumNumbersSpark(implicit override val args: Args[SparkArgs])
     )
 }
 
-object SumNumsApp extends CApp[SparkArgs, SumNumbersSpark](SumNumbersSpark()(_))
+object SumNumsApp extends CApp[SparkArgs, SumNumbersSpark](SumNumbersSpark)
 
-case class NoRegApp(implicit override val args: Args[SparkArgs])
-  extends Apps.SparkPathApp[SparkArgs, Nothing]() {
+case class NoRegApp(args: Args[SparkArgs])
+  extends SparkPathApp[SparkArgs, Nothing](args) {
   // no-op
   import org.hammerlab.io.Printer._
   echo("woo")
 }
 
-object NoRegAp extends CApp[SparkArgs, NoRegApp](NoRegApp()(_))
+object NoRegAp extends CApp[SparkArgs, NoRegApp](NoRegApp)
 
 class SparkPathAppErrorTest extends Suite {
   test("main") {

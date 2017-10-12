@@ -1,7 +1,7 @@
 package org.hammerlab.cli.args
 
 import caseapp.{ ValueDescription, ExtraName ⇒ O, HelpMessage ⇒ M }
-import org.hammerlab.cli.app.Apps.OutPathOpts
+import org.hammerlab.cli.app.OutPathOpts
 import org.hammerlab.io.SampleSize
 import org.hammerlab.paths.Path
 
