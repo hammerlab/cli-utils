@@ -7,11 +7,13 @@ val defaults = Seq(
   )
 ) ++ addSparkDeps
 
+import Parent.{ autoImport ⇒ dep }
+
 lazy val args4j = project.settings(
   defaults,
   version := "1.1.1-SNAPSHOT",
   deps += bdg_utils_cli % "0.3.0",
-  testDeps += Parent.autoImport.args4j
+  testDeps += dep.args4j
 )
 
 lazy val case_app = project.settings(
@@ -19,7 +21,7 @@ lazy val case_app = project.settings(
   name := "case-app",
   version := "1.1.0-SNAPSHOT",
   deps ++= Seq(
-    Parent.autoImport.case_app,
+    dep.case_app,
     io % "2.0.0",
     paths % "1.3.1"
   )
