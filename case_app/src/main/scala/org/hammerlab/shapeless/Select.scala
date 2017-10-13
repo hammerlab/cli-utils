@@ -1,4 +1,4 @@
-package org.hammerlab.cli.app
+package org.hammerlab.shapeless
 
 import shapeless._
 

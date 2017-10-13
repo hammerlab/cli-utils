@@ -25,7 +25,6 @@ class SparkPathAppTest
 
 
 case class SparkArgs(@Recurse output: OutputArgs)
-  extends PathAppArgs
 
 object Foo
 
@@ -70,8 +69,8 @@ class SparkPathAppErrorTest extends Suite {
     intercept[IllegalArgumentException] {
       NoRegAp.main(
         Array(
-          "-o", outPath.toString,
-          path("numbers").toString
+          path("numbers").toString,
+          outPath.toString
         )
       )
     }.getMessage should fullyMatch regex("""Output path .* exists and overwrite \(-f\) not set""".r)

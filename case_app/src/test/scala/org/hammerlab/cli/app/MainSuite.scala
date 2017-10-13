@@ -9,16 +9,18 @@ import org.hammerlab.test.resources.File
 import org.hammerlab.test.{ firstLinesMatch, linesMatch }
 import org.scalatest.matchers.Matcher
 
-abstract class MainSuite(app: CaseApp[_])
-  extends suite.MainSuite {
-  def defaultOpts(outPath: Path): Seq[Arg] = Seq("-o", outPath)
-  def extraOpts: Seq[Arg] = Nil
-  def defaultArgs(outPath: Path): Seq[Arg] = Nil
+case class Arg(override val toString: String)
 
-  // TODO: move out of tests
-  case class Arg(override val toString: String)
+object Arg {
   implicit def strArg(s: String): Arg = Arg(s)
   implicit def pathArg(path: Path): Arg = Arg(path.toString)
+}
+
+abstract class MainSuite(app: CaseApp[_])
+  extends suite.MainSuite {
+  def defaultOpts(outPath: Path): Seq[Arg] = Nil
+  def extraOpts: Seq[Arg] = Nil
+  def defaultArgs(outPath: Path): Seq[Arg] = Seq(outPath)
 
   implicit def argsArray(args: Seq[Arg]): Array[String] =
     args.map(_.toString).toArray

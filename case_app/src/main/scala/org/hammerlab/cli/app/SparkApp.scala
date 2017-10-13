@@ -13,11 +13,11 @@ trait HasSparkConf
     with confs.EventLog
     with confs.Speculation
 
-/*
-trait SparkApp[Args]
-  extends HasSparkConf {
+trait SparkApp
+  extends HasSparkConf
+    with Logging {
 
-  self: App[Args] with Logging ⇒
+  self: App[_] ⇒
 
   @transient private var _sc: SparkContext = _
 
@@ -39,7 +39,7 @@ trait SparkApp[Args]
 
   implicit def conf: Configuration = sc.hadoopConfiguration
 
-  override def done(): Unit = {
+  deinit {
     if (_sc != null && !_sc.isStopped) {
       info("Stopping SparkContext")
       _sc.stop()
@@ -47,4 +47,3 @@ trait SparkApp[Args]
     _sc = null
   }
 }
-*/

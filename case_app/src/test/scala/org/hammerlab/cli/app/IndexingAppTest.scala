@@ -17,12 +17,11 @@ class IndexingAppTest
   }
 }
 
-//@AppName("Add up numbers from an input file, write result to a sibling file with extension '.sum'")
-//case class Opts(@O("o") out: Option[Path] = None)
-//  extends OutPathArgs
+case class Opts(@O("o") out: Option[Path] = None,
+                overwrite: Boolean = false)
 
-case class SumNumbers(args: Args[SparkArgs])
-  extends IndexingApp(".sum", args) {
+case class SumNumbers(args: Args[Opts])
+  extends IndexingApp("sum", args) {
   import org.hammerlab.io.Printer._
   import cats.implicits.catsStdShowForInt
   echo(
@@ -33,4 +32,5 @@ case class SumNumbers(args: Args[SparkArgs])
   )
 }
 
-object SumNumbersApp extends CApp[SparkArgs, SumNumbers](SumNumbers)
+/** Add up numbers from an input file, write result to a sibling file with extension '.sum' */
+object SumNumbersApp extends CApp[Opts, SumNumbers](SumNumbers)
