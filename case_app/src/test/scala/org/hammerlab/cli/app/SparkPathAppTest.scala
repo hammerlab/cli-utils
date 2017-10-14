@@ -10,7 +10,10 @@ import org.hammerlab.test.Suite
 class SparkPathAppTest
   extends MainSuite(SumNumsApp) {
 
-  sparkConf("spark.eventLog.enabled" → "false")
+  sparkConf(
+    "spark.eventLog.enabled" → "false",
+    "spark.hadoop.aaa" → "bbb"
+  )
 
   /**
    * Test dummy [[SumNumbersSpark]] app below, which prints the sum of some numbers as well as its
@@ -20,7 +23,9 @@ class SparkPathAppTest
     check(
       path("numbers")
     )(
-      """10 numbers:
+      """spark.hadoop.aaa: bbb
+        |
+        |10 numbers:
         |	1
         |	2
         |	3
@@ -44,7 +49,9 @@ class SparkPathAppTest
       "-l", "5",
       path("numbers")
     )(
-      """5 of 10 numbers:
+      """spark.hadoop.aaa: bbb
+        |
+        |5 of 10 numbers:
         |	1
         |	2
         |	3
@@ -79,6 +86,11 @@ case class SumNumbersSpark(args: Args[SparkArgs])
   import cats.implicits.{ catsKernelStdGroupForInt, catsKernelStdGroupForLong, catsStdShowForInt }
   import cats.syntax.all._
   import org.hammerlab.types.Monoid._
+
+  echo(
+    s"spark.hadoop.aaa: ${conf.get("aaa", "")}",
+    ""
+  )
 
   val (sum, count) =
     rdd
@@ -129,9 +141,9 @@ class SparkPathAppErrorTest
     // Try to run against a path that already exists
     intercept[IllegalArgumentException] {
       NoRegAp.main(
-        Array(
-          path("numbers").toString,
-          outPath.toString
+        Array[Arg](
+          path("numbers"),
+          outPath
         )
       )
     }
@@ -141,9 +153,9 @@ class SparkPathAppErrorTest
   test("shutdown without initializing SparkContext") {
     val outPath = tmpPath()
     NoRegAp.main(
-      Array(
-        path("numbers").toString,
-        outPath.toString
+      Array[Arg](
+        path("numbers"),
+        outPath
       )
     )
     outPath.read should be("yay\n")

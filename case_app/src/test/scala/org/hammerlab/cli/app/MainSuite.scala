@@ -11,6 +11,7 @@ import org.scalatest.matchers.Matcher
 
 abstract class MainSuite(app: CaseApp[_])
   extends suite.MainSuite {
+
   def defaultOpts(outPath: Path): Seq[Arg] = Nil
   def extraOpts: Seq[Arg] = Nil
   def defaultArgs(outPath: Path): Seq[Arg] = Nil

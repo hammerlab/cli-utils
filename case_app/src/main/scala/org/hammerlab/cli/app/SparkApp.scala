@@ -32,6 +32,7 @@ trait SparkApp
         conf.set("spark.eventLog.enabled", "false")
         warn("Disabling event-logging because default destination /tmp/spark-events doesn't exist")
       }
+      
       _sc = new SparkContext(conf)
     }
     _sc

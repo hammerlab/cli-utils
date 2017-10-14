@@ -3,7 +3,7 @@ val defaults = Seq(
   organization := "org.hammerlab.cli",
   deps ++= Seq(
     slf4j,
-    spark_util % "2.0.0"
+    spark_util % "2.0.1-SNAPSHOT"
   )
 ) ++ addSparkDeps
 
