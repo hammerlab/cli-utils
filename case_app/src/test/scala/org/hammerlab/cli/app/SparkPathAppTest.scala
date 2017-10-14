@@ -1,13 +1,14 @@
 package org.hammerlab.cli.app
 
 import caseapp.Recurse
-import org.hammerlab.cli.app.OutPathApp.HasOverwrite
 import org.hammerlab.cli.args.OutputArgs
 import org.hammerlab.kryo.spark.Registrar
 import org.hammerlab.test.Suite
 
 class SparkPathAppTest
   extends MainSuite(SumNumsApp) {
+
+  sparkConf("spark.eventLog.enabled" → "false")
 
   /**
    * Test dummy [[SumNumbersSpark]] app below, which prints the sum of some numbers as well as its
@@ -35,7 +36,6 @@ class Reg extends Registrar(Foo.getClass)
 case class SumNumbersSpark(args: Args[SparkArgs])
   extends SparkPathApp[SparkArgs, Reg](args) {
   import cats.implicits.catsStdShowForInt
-  implicitly[HasOverwrite[SparkArgs]]
   import org.hammerlab.io.Printer._
   echo(
     sc
@@ -62,7 +62,8 @@ case class NoRegApp(args: Args[SparkArgs])
 
 object NoRegAp extends CApp[SparkArgs, NoRegApp](NoRegApp)
 
-class SparkPathAppErrorTest extends Suite {
+class SparkPathAppErrorTest
+  extends Suite {
   test("main") {
     val outPath = tmpPath()
     outPath.write("abc")

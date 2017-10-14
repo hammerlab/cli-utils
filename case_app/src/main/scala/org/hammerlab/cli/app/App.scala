@@ -9,13 +9,17 @@ import scala.collection.mutable.ArrayBuffer
 
 abstract class CApp[Opts : Parser : Messages, Ap <: App[Opts]](make: Args[Opts] ⇒ Ap)
   extends CaseApp[Opts] {
-  override def run(opts: Opts, args: RemainingArgs): Unit =
-    make(
-      Args(
-        opts,
-        args.remainingArgs
+  override def run(opts: Opts, args: RemainingArgs): Unit = {
+    val app =
+      make(
+        Args(
+          opts,
+          args.remainingArgs
+        )
       )
-    )
+
+    app.close()
+  }
 }
 
 abstract class App[Opts](protected val _args: Args[Opts])
