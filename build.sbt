@@ -25,6 +25,10 @@ lazy val case_app = project.settings(
     io % "2.0.0",
     "org.hammerlab" ^^ "shapeless-utils" ^ "1.0.0-SNAPSHOT",
     paths % "1.3.1"
+  ),
+  testDeps ++= Seq(
+    cats,
+    magic_rdds ^ "3.1.0"
   )
 )
 

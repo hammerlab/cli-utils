@@ -54,7 +54,7 @@ trait WithPrintLimit[Opts]
   self: App[Opts] ⇒
   private var _printLimit: SampleSize = _
   implicit def printLimit(implicit select: Find[Opts, Witness.`'printLimit`.T, SampleSize]): SampleSize = {
-    if (printLimit == null)
+    if (_printLimit == null)
       _printLimit = select(_args)
 
     _printLimit

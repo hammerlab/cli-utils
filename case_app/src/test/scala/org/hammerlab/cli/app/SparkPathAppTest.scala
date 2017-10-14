@@ -2,7 +2,9 @@ package org.hammerlab.cli.app
 
 import caseapp.Recurse
 import org.hammerlab.cli.args.OutputArgs
+import org.hammerlab.io.Printer._
 import org.hammerlab.kryo.spark.Registrar
+import org.hammerlab.magic.rdd.SampleRDD._
 import org.hammerlab.test.Suite
 
 class SparkPathAppTest
@@ -14,12 +16,45 @@ class SparkPathAppTest
    * Test dummy [[SumNumbersSpark]] app below, which prints the sum of some numbers as well as its
    * [[org.apache.spark.serializer.KryoRegistrator]].
    */
-  test("SumNumbersSpark") {
+  test("print all") {
     check(
       path("numbers")
     )(
-      """55
-        |org.hammerlab.cli.app.Reg
+      """10 numbers:
+        |	1
+        |	2
+        |	3
+        |	4
+        |	5
+        |	6
+        |	7
+        |	8
+        |	9
+        |	10
+        |
+        |Sum: 55
+        |
+        |Kryo registrator: org.hammerlab.cli.app.Reg
+        |"""
+    )
+  }
+
+  test("print limit 5") {
+    check(
+      "-l", "5",
+      path("numbers")
+    )(
+      """5 of 10 numbers:
+        |	1
+        |	2
+        |	3
+        |	4
+        |	5
+        |	…
+        |
+        |Sum: 55
+        |
+        |Kryo registrator: org.hammerlab.cli.app.Reg
         |"""
     )
   }
@@ -35,19 +70,43 @@ class Reg extends Registrar(Foo.getClass)
 
 case class SumNumbersSpark(args: Args[SparkArgs])
   extends SparkPathApp[SparkArgs, Reg](args) {
-  import cats.implicits.catsStdShowForInt
-  import org.hammerlab.io.Printer._
-  echo(
+
+  val rdd =
     sc
       .textFile(path.toString)
       .map(_.toInt)
-      .reduce(_ + _),
+
+  import cats.implicits.{ catsKernelStdGroupForInt, catsKernelStdGroupForLong, catsStdShowForInt }
+  import cats.syntax.all._
+  import org.hammerlab.types.Monoid._
+
+  val (sum, count) =
+    rdd
+      .map(_ → 1L)
+      .reduce(_ |+| _)
+
+  val sampledInts = rdd.sample(count)
+
+  print(
+    sampledInts,
+    count,
+    s"$count numbers:",
+    n ⇒ s"$n of $count numbers:"
+  )
+
+  val registrator =
     sc
       .getConf
       .get(
         "spark.kryo.registrator",
         ""
       )
+
+  echo(
+    "",
+    s"Sum: $sum",
+    "",
+    s"Kryo registrator: $registrator"
   )
 }
 
@@ -56,7 +115,6 @@ object SumNumsApp extends CApp[SparkArgs, SumNumbersSpark](SumNumbersSpark)
 case class NoRegApp(args: Args[SparkArgs])
   extends SparkPathApp[SparkArgs, Nothing](args) {
   // no-op
-  import org.hammerlab.io.Printer._
   echo("yay")
 }
 
@@ -64,7 +122,7 @@ object NoRegAp extends CApp[SparkArgs, NoRegApp](NoRegApp)
 
 class SparkPathAppErrorTest
   extends Suite {
-  test("main") {
+  test("outPath exists") {
     val outPath = tmpPath()
     outPath.write("abc")
 
@@ -76,7 +134,19 @@ class SparkPathAppErrorTest
           outPath.toString
         )
       )
-    }.getMessage should fullyMatch regex("""Output path .* exists and overwrite \(-f\) not set""".r)
+    }
+    .getMessage should fullyMatch regex("""Output path .* exists and overwrite \(-f\) not set""".r)
+  }
+
+  test("shutdown without initializing SparkContext") {
+    val outPath = tmpPath()
+    NoRegAp.main(
+      Array(
+        path("numbers").toString,
+        outPath.toString
+      )
+    )
+    outPath.read should be("yay\n")
   }
 }
 

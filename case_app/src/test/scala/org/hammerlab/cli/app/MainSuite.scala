@@ -9,18 +9,12 @@ import org.hammerlab.test.resources.File
 import org.hammerlab.test.{ firstLinesMatch, linesMatch }
 import org.scalatest.matchers.Matcher
 
-case class Arg(override val toString: String)
-
-object Arg {
-  implicit def strArg(s: String): Arg = Arg(s)
-  implicit def pathArg(path: Path): Arg = Arg(path.toString)
-}
-
 abstract class MainSuite(app: CaseApp[_])
   extends suite.MainSuite {
   def defaultOpts(outPath: Path): Seq[Arg] = Nil
   def extraOpts: Seq[Arg] = Nil
-  def defaultArgs(outPath: Path): Seq[Arg] = Seq(outPath)
+  def defaultArgs(outPath: Path): Seq[Arg] = Nil
+  def extraArgs(outPath: Path): Seq[Arg] = Seq(outPath)
 
   implicit def argsArray(args: Seq[Arg]): Array[String] =
     args.map(_.toString).toArray
@@ -58,9 +52,10 @@ abstract class MainSuite(app: CaseApp[_])
 
     app.main(
       defaultOpts(outPath) ++
-        extraOpts ++
-        args ++
-        defaultArgs(outPath)
+      extraOpts ++
+      defaultArgs(outPath) ++
+      args ++
+      extraArgs(outPath)
     )
 
     actual(outPath) should matcher
