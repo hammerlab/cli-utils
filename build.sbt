@@ -23,6 +23,7 @@ lazy val case_app = project.settings(
   deps ++= Seq(
     dep.case_app,
     io % "2.0.0",
+    "org.hammerlab" ^^ "shapeless-utils" ^ "1.0.0-SNAPSHOT",
     paths % "1.3.1"
   )
 )

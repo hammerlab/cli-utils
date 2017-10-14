@@ -5,7 +5,7 @@ import java.io.Closeable
 import org.hammerlab.cli.app.OutPathApp.HasOverwrite
 import org.hammerlab.io.{ Printer, SampleSize }
 import org.hammerlab.paths.Path
-import org.hammerlab.shapeless.{ Find, Select }
+import org.hammerlab.shapeless.record.Find
 import shapeless.Witness
 
 /**
@@ -44,11 +44,16 @@ trait WithPrinter[Opts]
   }
 }
 
+
+/**
+ * Mix-in for [[WithPrinter]] [[App]]s that may set an optional cap on how many items should be output from potentially
+ * large collections (e.g. [[org.apache.spark.rdd.RDD]]s).
+ */
 trait WithPrintLimit[Opts]
   extends WithPrinter[Opts] {
   self: App[Opts] ⇒
   private var _printLimit: SampleSize = _
-  implicit def printLimit(implicit select: Find.Aux[Opts, Witness.`'printLimit`.T, SampleSize]): SampleSize = {
+  implicit def printLimit(implicit select: Find[Opts, Witness.`'printLimit`.T, SampleSize]): SampleSize = {
     if (printLimit == null)
       _printLimit = select(_args)
 

@@ -2,7 +2,6 @@ package org.hammerlab.cli.args
 
 import caseapp.{ ValueDescription, ExtraName ⇒ O, HelpMessage ⇒ M }
 import org.hammerlab.io.SampleSize
-import org.hammerlab.paths.Path
 
 case class OutputArgs(
   @O("l")

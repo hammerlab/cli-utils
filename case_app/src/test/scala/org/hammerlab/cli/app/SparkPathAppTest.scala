@@ -1,6 +1,7 @@
 package org.hammerlab.cli.app
 
 import caseapp.Recurse
+import org.hammerlab.cli.app.OutPathApp.HasOverwrite
 import org.hammerlab.cli.args.OutputArgs
 import org.hammerlab.kryo.spark.Registrar
 import org.hammerlab.test.Suite
@@ -33,20 +34,21 @@ class Reg extends Registrar(Foo.getClass)
 
 case class SumNumbersSpark(args: Args[SparkArgs])
   extends SparkPathApp[SparkArgs, Reg](args) {
-    import cats.implicits.catsStdShowForInt
-    import org.hammerlab.io.Printer._
-    echo(
-      sc
-        .textFile(path.toString)
-        .map(_.toInt)
-        .reduce(_ + _),
-      sc
-        .getConf
-        .get(
-          "spark.kryo.registrator",
-          ""
-        )
-    )
+  import cats.implicits.catsStdShowForInt
+  implicitly[HasOverwrite[SparkArgs]]
+  import org.hammerlab.io.Printer._
+  echo(
+    sc
+      .textFile(path.toString)
+      .map(_.toInt)
+      .reduce(_ + _),
+    sc
+      .getConf
+      .get(
+        "spark.kryo.registrator",
+        ""
+      )
+  )
 }
 
 object SumNumsApp extends CApp[SparkArgs, SumNumbersSpark](SumNumbersSpark)
@@ -55,7 +57,7 @@ case class NoRegApp(args: Args[SparkArgs])
   extends SparkPathApp[SparkArgs, Nothing](args) {
   // no-op
   import org.hammerlab.io.Printer._
-  echo("woo")
+  echo("yay")
 }
 
 object NoRegAp extends CApp[SparkArgs, NoRegApp](NoRegApp)
