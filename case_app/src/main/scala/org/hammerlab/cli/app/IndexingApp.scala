@@ -14,7 +14,7 @@ import org.hammerlab.paths.Path
 abstract class IndexingApp[Opts : Parser : Messages](suffix: String, args: Args[Opts])
   extends PathApp[Opts](args)
     with OutPathApp
-    with WithPrinter[Opts] {
+    with WithPrinter {
   override def outPath: Option[Path] =
     Some(
       if (args.length > 1)

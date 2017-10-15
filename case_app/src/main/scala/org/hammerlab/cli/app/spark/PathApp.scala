@@ -12,7 +12,7 @@ abstract class PathApp[Opts](_args: Args[Opts],
                              reg: KryoRegistrator = null)
   extends ArgsOutPathApp[Opts](_args)
     with HasSparkContext
-    with WithPrintLimit[Opts]
+    with WithPrintLimit
     with confs.Kryo {
   Option(reg).foreach(registrar(_))
 }

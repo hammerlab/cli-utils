@@ -6,15 +6,16 @@ import org.hammerlab.cli.app.OutPathApp.HasOverwrite
 import org.hammerlab.io.{ Printer, SampleSize }
 import org.hammerlab.paths.Path
 import org.hammerlab.shapeless.record.Find
-import shapeless.Witness
+import shapeless.{ Witness ⇒ W }
 
 /**
  * Interface for [[App]]s that print to an output [[Path]], if one is provided, otherwise to stdout
  */
-trait WithPrinter[Opts]
+trait WithPrinter
   extends Closeable
     with OutPathApp {
-  self: App[Opts] ⇒
+
+  self: App[_] ⇒
 
   private var _printer: Printer = _
 
@@ -24,9 +25,11 @@ trait WithPrinter[Opts]
    *
    * Interpretable as a work-around for traits' inability to take evidence parameters
    */
-  implicit def printer(implicit getOverwrite: HasOverwrite[Opts]) = {
+  implicit def printer[Opts](implicit
+                             args: Args[Opts],
+                             getOverwrite: HasOverwrite[Opts]) = {
     if (_printer == null) {
-      val overwrite = getOverwrite(_args)
+      val overwrite = getOverwrite(args)
       _printer =
         outPath match {
           case Some(path)
@@ -38,10 +41,12 @@ trait WithPrinter[Opts]
           case _ ⇒
             Printer(outPath)
         }
+
+      deinit {
+        _printer.close()
+      }
     }
-    deinit {
-      _printer.close()
-    }
+
     _printer
   }
 }
@@ -51,13 +56,15 @@ trait WithPrinter[Opts]
  * Mix-in for [[WithPrinter]] [[App]]s that may set an optional cap on how many items should be output from potentially
  * large collections (e.g. [[org.apache.spark.rdd.RDD]]s).
  */
-trait WithPrintLimit[Opts]
-  extends WithPrinter[Opts] {
-  self: App[Opts] ⇒
+trait WithPrintLimit
+  extends WithPrinter {
+  self: App[_] ⇒
   private var _printLimit: SampleSize = _
-  implicit def printLimit(implicit select: Find[Opts, Witness.`'printLimit`.T, SampleSize]): SampleSize = {
+  implicit def printLimit[Opts](implicit
+                                args: Args[Opts],
+                                select: Find[Opts, W.`'printLimit`.T, SampleSize]): SampleSize = {
     if (_printLimit == null)
-      _printLimit = select(_args)
+      _printLimit = select(args)
 
     _printLimit
   }

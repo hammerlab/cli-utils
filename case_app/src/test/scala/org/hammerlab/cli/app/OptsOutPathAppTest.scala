@@ -23,7 +23,7 @@ object OptsOutPath {
 
   case class App(args: Args[Opts])
     extends OptsOutPathApp(args)
-      with WithPrinter[Opts] {
+      with WithPrinter {
     import org.hammerlab.io.Printer._
     echo("yay")
   }
