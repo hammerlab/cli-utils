@@ -29,9 +29,11 @@ trait WithPrinter[Opts]
       val overwrite = getOverwrite(_args)
       _printer =
         outPath match {
-          case Some(path) if path.exists && !overwrite ⇒
+          case Some(path)
+            if path.exists &&
+              !overwrite ⇒
             throw new IllegalArgumentException(
-              s"Output path $path exists and overwrite (-f) not set"
+              s"Output path $path exists and 'overwrite' not set"
             )
           case _ ⇒
             Printer(outPath)

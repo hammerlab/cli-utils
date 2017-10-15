@@ -1,36 +1,72 @@
 package org.hammerlab.cli.app
 
-import caseapp.{ AppName, ExtraName ⇒ O }
-import org.hammerlab.paths.Path
-import org.hammerlab.test.Suite
+import caseapp.{ ExtraName ⇒ O }
+import org.hammerlab.cli.app
+import org.hammerlab.cli.app.IndexingAppTest._
+import org.hammerlab.test
 
+/**
+ * Simple [[App]], [[Main]], and [[test.Suite]] for an [[IndexingApp]] that sums some numbers and writes the result to a
+ * file.
+ */
 class IndexingAppTest
-  extends Suite {
+  extends test.Suite {
   test("SumNumbers") {
     val in = fileCopy(path("numbers"), tmpPath())
-    SumNumbersApp.main(
-      Array(
-        in.toString()
-      )
+    Main(
+      Array[Arg](in)
     )
     (in + ".sum").read should be("55\n")
   }
+
+  test("outPath exists - error") {
+    val outPath = tmpPath()
+    outPath.write("abc")
+
+    // Try to run against a path that already exists
+    intercept[IllegalArgumentException] {
+      Main(
+        Array[Arg](
+          path("numbers"),
+          outPath
+        )
+      )
+    }
+    .getMessage should fullyMatch regex("""Output path .* exists and 'overwrite' not set""".r)
+  }
+
+  test("outPath exists - overwrite") {
+    val outPath = tmpPath()
+    outPath.write("abc")
+
+    // Try to run against a path that already exists
+    Main(
+      Array[Arg](
+        "-f",
+        path("numbers"),
+        outPath
+      )
+    )
+
+    outPath.read should be("55\n")
+  }
 }
 
-case class Opts(@O("o") out: Option[Path] = None,
-                overwrite: Boolean = false)
+object IndexingAppTest {
 
-case class SumNumbers(args: Args[Opts])
-  extends IndexingApp("sum", args) {
-  import org.hammerlab.io.Printer._
-  import cats.implicits.catsStdShowForInt
-  echo(
-    path
-      .lines
-      .map(_.toInt)
-      .sum
-  )
+  case class Opts(@O("f") overwrite: Boolean = false)
+
+  case class App(args: Args[Opts])
+    extends IndexingApp("sum", args) {
+    import cats.implicits.catsStdShowForInt
+    import org.hammerlab.io.Printer._
+    echo(
+      path
+        .lines
+        .map(_.toInt)
+        .sum
+    )
+  }
+
+  object Main extends app.Main(App)
 }
-
-/** Add up numbers from an input file, write result to a sibling file with extension '.sum' */
-object SumNumbersApp extends CApp[Opts, SumNumbers](SumNumbers)

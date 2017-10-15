@@ -1,6 +1,7 @@
 package org.hammerlab.cli.app
 
 import org.apache.spark.serializer.KryoRegistrator
+import org.hammerlab.cli.app.spark.SparkPathApp
 import org.hammerlab.spark.confs
 import org.hammerlab.spark.confs.Kryo
 

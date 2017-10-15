@@ -17,6 +17,9 @@ abstract class IndexingApp[Opts : Parser : Messages](suffix: String, args: Args[
     with WithPrinter[Opts] {
   override def outPath: Option[Path] =
     Some(
-      path + s".$suffix"
+      if (args.length > 1)
+        Path(args(1))
+      else
+        path + s".$suffix"
     )
 }

@@ -14,6 +14,7 @@ abstract class MainSuite(app: CaseApp[_])
 
   def defaultOpts(outPath: Path): Seq[Arg] = Nil
   def extraOpts: Seq[Arg] = Nil
+
   def defaultArgs(outPath: Path): Seq[Arg] = Nil
   def extraArgs(outPath: Path): Seq[Arg] = Seq(outPath)
 

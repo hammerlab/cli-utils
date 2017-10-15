@@ -1,7 +1,8 @@
-package org.hammerlab.cli.app
+package org.hammerlab.cli.app.spark
 
 import grizzled.slf4j.Logging
 import org.apache.spark.SparkContext
+import org.hammerlab.cli.app.App
 import org.hammerlab.hadoop.Configuration
 import org.hammerlab.paths.Path
 import org.hammerlab.spark.{ SparkConfBase, confs }
@@ -26,13 +27,13 @@ trait SparkApp
       info("Creating SparkContext")
       val conf = makeSparkConf
       if (
-        conf.get("spark.eventLog.enabled", "true") == "true" &&
+          conf.get("spark.eventLog.enabled", "true") == "true" &&
           conf.get("spark.eventLog.dir", "") == "" &&
           !Path("/tmp/spark-events").exists) {
         conf.set("spark.eventLog.enabled", "false")
         warn("Disabling event-logging because default destination /tmp/spark-events doesn't exist")
       }
-      
+
       _sc = new SparkContext(conf)
     }
     _sc

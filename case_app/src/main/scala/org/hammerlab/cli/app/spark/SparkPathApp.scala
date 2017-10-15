@@ -1,6 +1,6 @@
-package org.hammerlab.cli.app
+package org.hammerlab.cli.app.spark
 
-import org.hammerlab.cli.app.OutPathApp.HasOutPath
+import org.hammerlab.cli.app.{ Args, ArgsOutPathApp, IsRegistrar, WithPrintLimit }
 import org.hammerlab.spark.confs
 
 /**
