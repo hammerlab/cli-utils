@@ -21,13 +21,11 @@ object ConfigTest {
   case class App(args: Args[OutputArgs])
     extends PathApp(args, Reg) {
 
-    sparkConf(
-      "spark.eventLog.enabled" → "false",
-      "spark.hadoop.aaa" → "bbb"
-    )
+    sparkConf("spark.hadoop.aaa" → "bbb")
 
     echo(
       s"spark.hadoop.aaa: ${conf.get("aaa", "")}",
+      s"spark.eventLog.enabled: ${sc.getConf.get("spark.eventLog.enabled", "")}",
       s"spark.kryo.registrator: ${sc.getConf.get("spark.kryo.registrator", "")}"
     )
   }
@@ -37,11 +35,18 @@ object ConfigTest {
 
 class ConfigTest
   extends MainSuite(Main) {
+
+  sparkConf(
+    "spark.eventLog.enabled" → "true",
+    "spark.eventLog.dir" → tmpDir().toString
+  )
+
   test("run") {
     check(
       path("numbers")
     )(
       """spark.hadoop.aaa: bbb
+        |spark.eventLog.enabled: true
         |spark.kryo.registrator: org.hammerlab.cli.app.spark.ConfigTest$Reg$
         |"""
     )
