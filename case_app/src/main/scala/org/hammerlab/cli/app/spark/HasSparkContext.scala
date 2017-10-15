@@ -14,7 +14,7 @@ trait HasSparkConf
     with confs.EventLog
     with confs.Speculation
 
-trait SparkApp
+trait HasSparkContext
   extends HasSparkConf
     with Logging {
 

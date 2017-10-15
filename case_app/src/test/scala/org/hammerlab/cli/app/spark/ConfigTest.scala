@@ -14,11 +14,12 @@ object ConfigTest {
 
   /** Dummy registrar that only registers [[Foo]] below */
   class Reg extends Registrar(Foo.getClass)
+  object Reg extends Reg
 
   object Foo
 
   case class App(args: Args[OutputArgs])
-    extends SparkPathApp[OutputArgs, Reg](args) {
+    extends PathApp(args, Reg) {
 
     sparkConf(
       "spark.eventLog.enabled" → "false",
@@ -41,7 +42,7 @@ class ConfigTest
       path("numbers")
     )(
       """spark.hadoop.aaa: bbb
-        |spark.kryo.registrator: org.hammerlab.cli.app.ConfigTest$Reg
+        |spark.kryo.registrator: org.hammerlab.cli.app.spark.ConfigTest$Reg$
         |"""
     )
   }

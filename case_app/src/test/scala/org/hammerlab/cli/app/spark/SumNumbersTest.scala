@@ -65,7 +65,7 @@ object SumNumbers {
   case class Opts(@Recurse output: OutputArgs)
 
   case class App(args: Args[Opts])
-    extends SparkPathApp[Opts, Nothing](args) {
+    extends PathApp(args) {
 
     val rdd =
       sc

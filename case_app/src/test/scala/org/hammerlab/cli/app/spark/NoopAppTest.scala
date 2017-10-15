@@ -26,7 +26,7 @@ class NoopAppTest
  */
 object NoopAppTest {
   case class App(args: Args[OutputArgs])
-    extends SparkPathApp[OutputArgs, Nothing](args) {
+    extends PathApp(args) {
     echo("yay")
   }
   object Main extends app.Main(App)
