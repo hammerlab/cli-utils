@@ -21,6 +21,7 @@ object ConfigTest {
   case class App(args: Args[OutputArgs])
     extends PathApp(args, Reg) {
 
+    // Pass a config through to Hadoop
     sparkConf("spark.hadoop.aaa" → "bbb")
 
     echo(
@@ -37,8 +38,7 @@ class ConfigTest
   extends MainSuite(Main) {
 
   sparkConf(
-    "spark.eventLog.enabled" → "true",
-    "spark.eventLog.dir" → tmpDir().toString
+    "spark.eventLog.enabled" → "true"
   )
 
   test("run") {
@@ -46,7 +46,7 @@ class ConfigTest
       path("numbers")
     )(
       """spark.hadoop.aaa: bbb
-        |spark.eventLog.enabled: true
+        |spark.eventLog.enabled: false
         |spark.kryo.registrator: org.hammerlab.cli.app.spark.ConfigTest$Reg$
         |"""
     )
