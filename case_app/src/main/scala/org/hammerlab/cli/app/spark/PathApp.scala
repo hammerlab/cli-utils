@@ -1,7 +1,7 @@
 package org.hammerlab.cli.app.spark
 
-import org.apache.spark.serializer.KryoRegistrator
-import org.hammerlab.cli.app.{ Args, ArgsOutPathApp, WithPrintLimit }
+import org.hammerlab.cli.app.spark.Registrar.noop
+import org.hammerlab.cli.app.{ Args, ArgsOutPathApp, Closeable, HasPrintLimit }
 import org.hammerlab.spark.confs
 
 /**
@@ -9,10 +9,12 @@ import org.hammerlab.spark.confs
  * such output.
  */
 abstract class PathApp[Opts](_args: Args[Opts],
-                             reg: KryoRegistrator = null)
+                             reg: Registrar = noop)(
+    implicit c: Closeable
+)
   extends ArgsOutPathApp[Opts](_args)
     with HasSparkContext
-    with WithPrintLimit
+    with HasPrintLimit
     with confs.Kryo {
-  Option(reg).foreach(registrar(_))
+  reg.apply(this)
 }

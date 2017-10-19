@@ -1,7 +1,6 @@
 package org.hammerlab.cli.app
 
-import java.io.Closeable
-
+import org.hammerlab.cli.app.HasPrintLimit.PrintLimit
 import org.hammerlab.cli.app.OutPathApp.HasOverwrite
 import org.hammerlab.io.{ Printer, SampleSize }
 import org.hammerlab.paths.Path
@@ -11,13 +10,12 @@ import shapeless.{ Witness ⇒ W }
 /**
  * Interface for [[App]]s that print to an output [[Path]], if one is provided, otherwise to stdout
  */
-trait WithPrinter
-  extends Closeable
-    with OutPathApp {
+trait HasPrinter
+  extends OutPathApp {
 
   self: App[_] ⇒
 
-  private var _printer: Printer = _
+  @transient private var _printer: Printer = _
 
   /**
    * Lazily construct and cache a [[Printer]] in the presence of evidence that [[Opts]] has an `overwrite: Boolean`
@@ -53,19 +51,23 @@ trait WithPrinter
 
 
 /**
- * Mix-in for [[WithPrinter]] [[App]]s that may set an optional cap on how many items should be output from potentially
+ * Mix-in for [[HasPrinter]] [[App]]s that may set an optional cap on how many items should be output from potentially
  * large collections (e.g. [[org.apache.spark.rdd.RDD]]s).
  */
-trait WithPrintLimit
-  extends WithPrinter {
+trait HasPrintLimit
+  extends HasPrinter {
   self: App[_] ⇒
   private var _printLimit: SampleSize = _
   implicit def printLimit[Opts](implicit
                                 args: Args[Opts],
-                                select: Find[Opts, W.`'printLimit`.T, SampleSize]): SampleSize = {
+                                select: PrintLimit[Opts]): SampleSize = {
     if (_printLimit == null)
       _printLimit = select(args)
 
     _printLimit
   }
+}
+
+object HasPrintLimit {
+  type PrintLimit[Opts] = Find[Opts, W.`'printLimit`.T, SampleSize]
 }

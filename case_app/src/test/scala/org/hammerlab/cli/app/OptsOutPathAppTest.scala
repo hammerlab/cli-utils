@@ -1,10 +1,9 @@
 package org.hammerlab.cli.app
 
-import org.hammerlab.cli.app
 import org.hammerlab.paths.Path
 
 class OptsOutPathAppTest
-  extends MainSuite(OptsOutPath.Main) {
+  extends MainSuite(OptsOutPath) {
 
   test("run") {
     check(
@@ -17,16 +16,15 @@ class OptsOutPathAppTest
   override def defaultOpts(outPath: Path) = Seq("--out-path", outPath)
 }
 
-object OptsOutPath {
+object OptsOutPath extends AppContainer {
   case class Opts(outPath: Option[Path],
                   overwrite: Boolean = false)
 
-  case class App(args: Args[Opts])
-    extends OptsOutPathApp(args)
-      with WithPrinter {
-    import org.hammerlab.io.Printer._
-    echo("yay")
-  }
-
-  object Main extends app.Main(App)
+  val main = AppMain(
+    new OptsOutPathApp(_)
+      with HasPrinter {
+      import org.hammerlab.io.Printer._
+      echo("yay")
+    }
+  )
 }

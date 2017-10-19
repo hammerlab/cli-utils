@@ -3,7 +3,7 @@ val defaults = Seq(
   organization := "org.hammerlab.cli",
   deps ++= Seq(
     slf4j,
-    spark_util % "2.0.1-SNAPSHOT"
+    spark_util % "2.0.1"
   )
 ) ++ addSparkDeps
 
@@ -23,13 +23,14 @@ lazy val case_app = project.settings(
   deps ++= Seq(
     dep.case_app,
     io % "2.0.0",
-    "org.hammerlab" ^^ "shapeless-utils" ^ "1.0.0-SNAPSHOT",
-    paths % "1.3.1"
+    paths % "1.3.1",
+    hammerlab("shapeless-utils") % "1.0.1-SNAPSHOT"
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds ^ "3.1.0"
-  )
+    magic_rdds % "3.1.0"
+  ),
+  publishTestJar  // MainSuite is useful in downstream libraries' tests
 )
 
 lazy val cli_root =

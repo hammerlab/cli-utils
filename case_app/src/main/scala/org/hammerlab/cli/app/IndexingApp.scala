@@ -11,10 +11,13 @@ import org.hammerlab.paths.Path
  * @param suffix if [[OutPathApp.outPath]] is empty, construct an output path by appending this string – prefixed with a
  *               "." –  to the argument [[PathApp.path input path]].
  */
-abstract class IndexingApp[Opts : Parser : Messages](suffix: String, args: Args[Opts])
+case class IndexingApp[Opts : Parser : Messages](suffix: String,
+                                                 args: Args[Opts])(
+    implicit c: Closeable
+)
   extends PathApp[Opts](args)
     with OutPathApp
-    with WithPrinter {
+    with HasPrinter {
   override def outPath: Option[Path] =
     Some(
       if (args.length > 1)

@@ -2,6 +2,9 @@ package org.hammerlab.cli.app
 
 import org.hammerlab.paths.Path
 
+/**
+ * Simple wrapper over [[String]] and [[Path]] arguments, for [[Main]]-calling convenience.
+ */
 case class Arg(override val toString: String)
 
 object Arg {

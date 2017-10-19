@@ -1,33 +1,28 @@
 package org.hammerlab.cli.app.spark
 
-import org.hammerlab.cli.app
-import org.hammerlab.cli.app.{ App, Arg, Args }
-import org.hammerlab.cli.args.OutputArgs
+import org.hammerlab.cli.app.{ App, Container, MainSuite }
+import org.hammerlab.cli.args.PrintLimitArgs
 import org.hammerlab.io.Printer.echo
-import org.hammerlab.test.Suite
 
 class NoopAppTest
-  extends Suite {
-  import NoopAppTest._
+  extends MainSuite(NoopAppTest) {
   test("shutdown without initializing SparkContext") {
-    val outPath = tmpPath()
-    Main(
-      Array[Arg](
-        path("numbers"),
-        outPath
-      )
+    check(
+      path("numbers")
+    )(
+      "yay\n"
     )
-    outPath.read should be("yay\n")
   }
 }
 
 /**
  * [[App]] that exercises some error and no-op code paths.
  */
-object NoopAppTest {
-  case class App(args: Args[OutputArgs])
-    extends PathApp(args) {
-    echo("yay")
-  }
-  object Main extends app.Main(App)
+object NoopAppTest extends Container[PrintLimitArgs] {
+  val main = AppMain(
+    new PathApp(_) {
+      echo("yay")
+    }
+  )
 }
+

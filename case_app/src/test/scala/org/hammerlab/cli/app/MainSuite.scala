@@ -1,6 +1,5 @@
 package org.hammerlab.cli.app
 
-import caseapp.CaseApp
 import org.hammerlab.paths.Path
 import org.hammerlab.spark.test.suite
 import org.hammerlab.test.matchers.files.FileMatcher.fileMatch
@@ -9,17 +8,18 @@ import org.hammerlab.test.resources.File
 import org.hammerlab.test.{ firstLinesMatch, linesMatch }
 import org.scalatest.matchers.Matcher
 
-abstract class MainSuite(app: CaseApp[_])
+abstract class MainSuite(protected val appContainer: AppContainer)
   extends suite.MainSuite {
 
+  protected val main = appContainer.main
+
+  def outBasename: String = ""
+
+  // options that come before caller-supplied arguments
   def defaultOpts(outPath: Path): Seq[Arg] = Nil
-  def extraOpts: Seq[Arg] = Nil
 
-  def defaultArgs(outPath: Path): Seq[Arg] = Nil
+  // options that come after caller-supplied arguments
   def extraArgs(outPath: Path): Seq[Arg] = Seq(outPath)
-
-  implicit def argsArray(args: Seq[Arg]): Array[String] =
-    args.map(_.toString).toArray
 
   def checkFirstLines(args: Arg*)(lines: Line*): Unit =
     shouldMatch(
@@ -49,17 +49,24 @@ abstract class MainSuite(app: CaseApp[_])
       be(expected.stripMargin)
     )
 
-  def shouldMatch[T](args: Seq[Arg], actual: Path ⇒ T, matcher: Matcher[T]): Unit = {
-    val outPath = tmpPath()
+  def run(args: Seq[Arg]): Path = {
+    val outPath =
+      if (outBasename.nonEmpty)
+        tmpPath(outBasename)
+      else
+        tmpPath()
 
-    app.main(
+    appContainer.main.apply(
       defaultOpts(outPath) ++
-      extraOpts ++
-      defaultArgs(outPath) ++
       args ++
-      extraArgs(outPath)
+      extraArgs(outPath): _*
     )
 
+    outPath
+  }
+
+  def shouldMatch[T](args: Seq[Arg], actual: Path ⇒ T, matcher: Matcher[T]): Unit = {
+    val outPath = run(args)
     actual(outPath) should matcher
   }
 }

@@ -22,10 +22,11 @@ object OutPathApp {
 /**
  * [[App]] superclass where the second argument is the output path to write to; default: stdout
  */
-abstract class ArgsOutPathApp[Opts](args: Args[Opts])
+abstract class ArgsOutPathApp[Opts](args: Args[Opts])(
+    implicit c: Closeable
+)
   extends PathApp[Opts](args)
     with OutPathApp {
-  self: App[Opts] ⇒
   override implicit val outPath =
     if (args.size > 1)
       Some(
@@ -37,14 +38,40 @@ abstract class ArgsOutPathApp[Opts](args: Args[Opts])
       None
 }
 
+trait RequiredOutPath
+  extends OutPathApp {
+  def out: Path
+  override def outPath = Some(out)
+}
+
+/**
+ * [[App]] superclass where the second argument is the output path to write to; default: stdout
+ */
+abstract class RequiredArgOutPathApp[Opts](args: Args[Opts])(
+    implicit c: Closeable
+)
+  extends PathApp[Opts](args)
+    with RequiredOutPath {
+  override implicit val out =
+    if (args.size > 1)
+      Path(
+        args(1)
+      )
+    else
+      throw new IllegalArgumentException(
+        "Expected at least two arguments (input and output paths)"
+      )
+}
+
 /**
  * [[App]] with [[OutPathApp]] that gets its [[OutPathApp.outPath output path]] from its [[Opts]], which must have a
  * field named `outPath` of type [[Option]][[Path]]
  */
-abstract class OptsOutPathApp[Opts: HasOutPath](args: Args[Opts])
+abstract class OptsOutPathApp[Opts: HasOutPath](args: Args[Opts])(
+    implicit c: Closeable
+)
   extends PathApp[Opts](args)
     with OutPathApp {
-  self: App[Opts] ⇒
   override implicit val outPath = GetOutPath(args)
 }
 

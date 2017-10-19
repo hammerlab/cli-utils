@@ -1,19 +1,29 @@
 package org.hammerlab.cli.app
 
-import caseapp.{ CaseApp, Parser, RemainingArgs }
-import caseapp.core.Messages
+import caseapp.{ CaseApp, RemainingArgs }
+import org.hammerlab.cli.args.Parser
 
-abstract class Main[Opts : Parser : Messages, Ap <: App[Opts]](make: Args[Opts] ⇒ Ap)
-  extends CaseApp[Opts] {
+case class Main[Opts](make: Args[Opts] ⇒ App[Opts])(
+    implicit
+    c: Closeable,
+    parser: Parser[Opts]
+)
+  extends CaseApp[Opts]()(parser, parser.messages) {
 
-  def apply(args: Array[Arg]): Unit = main(args.map(_.toString))
+  def apply(args: Arg*): Unit = main(args.map(_.toString).toArray)
 
   override def run(opts: Opts, args: RemainingArgs): Unit =
-    make(
-      Args(
-        opts,
-        args.remainingArgs
-      )
-    )
-    .close()
+    try {
+      val app =
+        make(
+          Args(
+            opts,
+            args.remainingArgs
+          )
+        )
+
+      app.run()
+    } finally {
+      c.close()
+    }
 }

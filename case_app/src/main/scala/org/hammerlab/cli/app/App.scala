@@ -1,20 +1,23 @@
 package org.hammerlab.cli.app
 
-import java.io.Closeable
+abstract class App[Opts](protected val _args: Args[Opts])(
+    implicit val container: Closeable
+)
+  extends CloseableProxy
+    with Serializable {
 
-import scala.collection.mutable.ArrayBuffer
-
-abstract class App[Opts](protected val _args: Args[Opts])
-  extends Closeable {
-
-  implicit protected val _opts: Opts = _args
+  implicit protected val opts = _args.opts
   implicit protected val _iargs: Args[Opts] = _args
 
-  private val deinitializations = ArrayBuffer[() ⇒ Unit]()
-  def deinit(fn: ⇒ Unit): Unit = {
-    deinitializations += (() ⇒ fn)
-  }
-
-  override def close(): Unit =
-    deinitializations.foreach(_())
+  /**
+   * Optionally wrap functionality in this method, if e.g. this [[App]] is expected to be serialized and some
+   * things shouldn't run on a deserialized version.
+   *
+   * For example: code referencing a [[org.apache.spark.SparkContext]] shouldn't re-run in an [[App]] instance
+   * that's been sent to a Spark executor as part of a task closure).
+   *
+   * An example of logic to *not* wrap in [[run]] is implicit fields that are to be automatically in-scope in
+   * subclasses.
+   */
+  def run(): Unit = {}
 }

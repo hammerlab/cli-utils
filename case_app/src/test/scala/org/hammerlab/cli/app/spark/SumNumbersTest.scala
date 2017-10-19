@@ -1,15 +1,13 @@
 package org.hammerlab.cli.app.spark
 
 import caseapp.Recurse
-import org.hammerlab.cli.app
-import org.hammerlab.cli.app.spark.SumNumbers._
-import org.hammerlab.cli.app.{ App, Args, Main, MainSuite, WithPrintLimit }
-import org.hammerlab.cli.args.OutputArgs
+import org.hammerlab.cli.app.{ App, AppContainer, HasPrintLimit, Main, MainSuite }
+import org.hammerlab.cli.args.PrintLimitArgs
 import org.hammerlab.io.Printer._
 import org.hammerlab.magic.rdd.SampleRDD._
 
 class SumNumbersTest
-  extends MainSuite(Main) {
+  extends MainSuite(SumNumbers) {
 
   /**
    * Test dummy [[SumNumbers]] app below, which prints the sum of some numbers as well as its
@@ -58,41 +56,40 @@ class SumNumbersTest
 /**
  * Simple [[App]] and [[Main]] that reads some numbers and prints them and their sum.
  *
- * Exercises [[WithPrintLimit]], among other things.
+ * Exercises [[HasPrintLimit]], among other things.
  */
-object SumNumbers {
+object SumNumbers extends AppContainer {
 
-  case class Opts(@Recurse output: OutputArgs)
+  case class Opts(@Recurse output: PrintLimitArgs)
 
-  case class App(args: Args[Opts])
-    extends PathApp(args) {
+  val main = AppMain(
+    new PathApp(_) {
 
-    val rdd =
-      sc
-        .textFile(path.toString)
-        .map(_.toInt)
+      val rdd =
+        sc
+          .textFile(path.toString)
+          .map(_.toInt)
 
-    import cats.implicits._
+      import cats.implicits._
 
-    val (sum, count) =
-      rdd
-        .map(_ → 1L)
-        .reduce(_ |+| _)
+      val (sum, count) =
+        rdd
+          .map(_ → 1L)
+          .reduce(_ |+| _)
 
-    val sampledInts = rdd.sample(count)
+      val sampledInts = rdd.sample(count)
 
-    print(
-      sampledInts,
-      count,
-      s"$count numbers:",
-      n ⇒ s"$n of $count numbers:"
-    )
+      print(
+        sampledInts,
+        count,
+        s"$count numbers:",
+        n ⇒ s"$n of $count numbers:"
+      )
 
-    echo(
-      "",
-      s"Sum: $sum"
-    )
-  }
-
-  object Main extends app.Main(App)
+      echo(
+        "",
+        s"Sum: $sum"
+      )
+    }
+  )
 }

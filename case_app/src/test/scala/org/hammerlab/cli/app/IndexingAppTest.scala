@@ -1,8 +1,8 @@
 package org.hammerlab.cli.app
 
 import caseapp.{ ExtraName ⇒ O }
-import org.hammerlab.cli.app
 import org.hammerlab.cli.app.IndexingAppTest._
+import org.hammerlab.cli.args.Parser
 import org.hammerlab.test
 
 /**
@@ -13,9 +13,7 @@ class IndexingAppTest
   extends test.Suite {
   test("SumNumbers") {
     val in = fileCopy(path("numbers"), tmpPath())
-    Main(
-      Array[Arg](in)
-    )
+    main(in)
     (in + ".sum").read should be("55\n")
   }
 
@@ -25,11 +23,9 @@ class IndexingAppTest
 
     // Try to run against a path that already exists
     intercept[IllegalArgumentException] {
-      Main(
-        Array[Arg](
-          path("numbers"),
-          outPath
-        )
+      main(
+        path("numbers"),
+        outPath
       )
     }
     .getMessage should fullyMatch regex("""Output path .* exists and 'overwrite' not set""".r)
@@ -40,33 +36,30 @@ class IndexingAppTest
     outPath.write("abc")
 
     // Try to run against a path that already exists
-    Main(
-      Array[Arg](
-        "-f",
-        path("numbers"),
-        outPath
-      )
+    main(
+      "-f",
+      path("numbers"),
+      outPath
     )
 
     outPath.read should be("55\n")
   }
 }
 
-object IndexingAppTest {
-
+object IndexingAppTest
+  extends AppContainer {
   case class Opts(@O("f") overwrite: Boolean = false)
 
-  case class App(args: Args[Opts])
-    extends IndexingApp("sum", args) {
-    import cats.implicits.catsStdShowForInt
-    import org.hammerlab.io.Printer._
-    echo(
-      path
-        .lines
-        .map(_.toInt)
-        .sum
-    )
-  }
-
-  object Main extends app.Main(App)
+  val main = AppMain(
+    new IndexingApp("sum", _) {
+      import org.hammerlab.io.Printer._
+      import cats.implicits.catsStdShowForInt
+      echo(
+        path
+          .lines
+          .map(_.toInt)
+          .sum
+      )
+    }
+  )
 }

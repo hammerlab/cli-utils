@@ -1,41 +1,38 @@
 package org.hammerlab.cli.app.spark
 
-import org.hammerlab.cli.app
-import org.hammerlab.cli.app.spark.ConfigTest._
-import org.hammerlab.cli.app.{ App, Args, MainSuite }
-import org.hammerlab.cli.args.OutputArgs
+import org.hammerlab.cli.app.{ App, Container, MainSuite }
+import org.hammerlab.cli.args.PrintLimitArgs
 import org.hammerlab.io.Printer.echo
-import org.hammerlab.kryo.spark.Registrar
+import org.hammerlab.kryo.spark
 
 /**
  * [[App]] that sets various configuration options and verifies their propagation.
  */
-object ConfigTest {
+object ConfigTest
+  extends Container[PrintLimitArgs] {
 
   /** Dummy registrar that only registers [[Foo]] below */
-  class Reg extends Registrar(Foo.getClass)
-  object Reg extends Reg
+  case class Reg() extends spark.Registrar(Foo.getClass)
 
   object Foo
 
-  case class App(args: Args[OutputArgs])
-    extends PathApp(args, Reg) {
+  val main = AppMain(
+    new PathApp(_, Reg) {
 
-    // Pass a config through to Hadoop
-    sparkConf("spark.hadoop.aaa" → "bbb")
+      // Pass a config through to Hadoop
+      sparkConf("spark.hadoop.aaa" → "bbb")
 
-    echo(
-      s"spark.hadoop.aaa: ${conf.get("aaa", "")}",
-      s"spark.eventLog.enabled: ${sc.getConf.get("spark.eventLog.enabled", "")}",
-      s"spark.kryo.registrator: ${sc.getConf.get("spark.kryo.registrator", "")}"
-    )
-  }
-
-  object Main extends app.Main(App)
+      echo(
+        s"spark.hadoop.aaa: ${conf.get("aaa", "")}",
+        s"spark.eventLog.enabled: ${sc.getConf.get("spark.eventLog.enabled", "")}",
+        s"spark.kryo.registrator: ${sc.getConf.get("spark.kryo.registrator", "")}"
+      )
+    }
+  )
 }
 
 class ConfigTest
-  extends MainSuite(Main) {
+  extends MainSuite(ConfigTest) {
 
   sparkConf(
     "spark.eventLog.enabled" → "true"
@@ -47,7 +44,7 @@ class ConfigTest
     )(
       """spark.hadoop.aaa: bbb
         |spark.eventLog.enabled: false
-        |spark.kryo.registrator: org.hammerlab.cli.app.spark.ConfigTest$Reg$
+        |spark.kryo.registrator: org.hammerlab.cli.app.spark.ConfigTest$Reg
         |"""
     )
   }
