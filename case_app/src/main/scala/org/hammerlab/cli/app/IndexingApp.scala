@@ -1,7 +1,7 @@
 package org.hammerlab.cli.app
 
-import caseapp.Parser
-import caseapp.core.Messages
+import org.hammerlab.cli.app.close.Closeable
+import org.hammerlab.cli.args.Parser
 import org.hammerlab.paths.Path
 
 /**
@@ -11,8 +11,8 @@ import org.hammerlab.paths.Path
  * @param suffix if [[OutPathApp.outPath]] is empty, construct an output path by appending this string – prefixed with a
  *               "." –  to the argument [[PathApp.path input path]].
  */
-case class IndexingApp[Opts : Parser : Messages](suffix: String,
-                                                 args: Args[Opts])(
+case class IndexingApp[Opts : Parser](suffix: String,
+                                      args: Args[Opts])(
     implicit c: Closeable
 )
   extends PathApp[Opts](args)

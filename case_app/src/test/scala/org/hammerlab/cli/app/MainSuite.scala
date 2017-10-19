@@ -8,7 +8,7 @@ import org.hammerlab.test.resources.File
 import org.hammerlab.test.{ firstLinesMatch, linesMatch }
 import org.scalatest.matchers.Matcher
 
-abstract class MainSuite(protected val appContainer: AppContainer)
+abstract class MainSuite(protected val appContainer: Cmd)
   extends suite.MainSuite {
 
   protected val main = appContainer.main

@@ -1,6 +1,7 @@
 package org.hammerlab.cli.app.spark
 
-import org.hammerlab.cli.app.{ App, Container, MainSuite }
+import org.hammerlab.cli.app.Cmd
+import org.hammerlab.cli.app.{ App, MainSuite }
 import org.hammerlab.cli.args.PrintLimitArgs
 import org.hammerlab.io.Printer.echo
 import org.hammerlab.kryo.spark
@@ -9,14 +10,14 @@ import org.hammerlab.kryo.spark
  * [[App]] that sets various configuration options and verifies their propagation.
  */
 object ConfigTest
-  extends Container[PrintLimitArgs] {
+  extends Cmd.With[PrintLimitArgs] {
 
   /** Dummy registrar that only registers [[Foo]] below */
   case class Reg() extends spark.Registrar(Foo.getClass)
 
   object Foo
 
-  val main = AppMain(
+  val main = Main(
     new PathApp(_, Reg) {
 
       // Pass a config through to Hadoop

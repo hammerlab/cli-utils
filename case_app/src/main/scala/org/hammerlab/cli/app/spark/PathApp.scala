@@ -1,7 +1,8 @@
 package org.hammerlab.cli.app.spark
 
+import org.hammerlab.cli.app.close.Closeable
 import org.hammerlab.cli.app.spark.Registrar.noop
-import org.hammerlab.cli.app.{ Args, ArgsOutPathApp, Closeable, HasPrintLimit }
+import org.hammerlab.cli.app.{ Args, ArgsOutPathApp, HasPrintLimit }
 import org.hammerlab.spark.confs
 
 /**

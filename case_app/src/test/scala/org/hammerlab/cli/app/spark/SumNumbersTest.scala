@@ -1,7 +1,7 @@
 package org.hammerlab.cli.app.spark
 
 import caseapp.Recurse
-import org.hammerlab.cli.app.{ App, AppContainer, HasPrintLimit, Main, MainSuite }
+import org.hammerlab.cli.app.{ App, Cmd, HasPrintLimit, Runner, MainSuite }
 import org.hammerlab.cli.args.PrintLimitArgs
 import org.hammerlab.io.Printer._
 import org.hammerlab.magic.rdd.SampleRDD._
@@ -54,15 +54,15 @@ class SumNumbersTest
 }
 
 /**
- * Simple [[App]] and [[Main]] that reads some numbers and prints them and their sum.
+ * Simple [[App]] and [[Runner]] that reads some numbers and prints them and their sum.
  *
  * Exercises [[HasPrintLimit]], among other things.
  */
-object SumNumbers extends AppContainer {
+object SumNumbers extends Cmd {
 
   case class Opts(@Recurse output: PrintLimitArgs)
 
-  val main = AppMain(
+  val main = Main(
     new PathApp(_) {
 
       val rdd =

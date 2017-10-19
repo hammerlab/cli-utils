@@ -1,6 +1,7 @@
 package org.hammerlab.cli.app.spark
 
-import org.hammerlab.cli.app.{ App, Container, MainSuite }
+import org.hammerlab.cli.app.Cmd
+import org.hammerlab.cli.app.{ App, MainSuite }
 import org.hammerlab.cli.args.PrintLimitArgs
 import org.hammerlab.io.Printer.echo
 
@@ -18,8 +19,9 @@ class NoopAppTest
 /**
  * [[App]] that exercises some error and no-op code paths.
  */
-object NoopAppTest extends Container[PrintLimitArgs] {
-  val main = AppMain(
+object NoopAppTest
+  extends Cmd.With[PrintLimitArgs] {
+  val main = Main(
     new PathApp(_) {
       echo("yay")
     }

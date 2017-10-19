@@ -3,7 +3,7 @@ package org.hammerlab.cli.app
 import org.hammerlab.paths.Path
 
 /**
- * Simple wrapper over [[String]] and [[Path]] arguments, for [[Main]]-calling convenience.
+ * Simple wrapper over [[String]] and [[Path]] arguments, for [[Runner]]-calling convenience.
  */
 case class Arg(override val toString: String)
 

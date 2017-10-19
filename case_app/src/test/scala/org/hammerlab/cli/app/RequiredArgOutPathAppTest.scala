@@ -1,5 +1,6 @@
 package org.hammerlab.cli.app
 
+import org.hammerlab.cli.app.Cmd.With
 import org.hammerlab.cli.args.PrinterArgs
 import org.hammerlab.io.Printer._
 
@@ -25,8 +26,8 @@ class RequiredArgOutPathAppTest
 }
 
 object RequiredArgOutPathTest
-  extends Container[PrinterArgs] {
-  val main = AppMain(
+  extends Cmd.With[PrinterArgs] {
+  val main = Main(
     new RequiredArgOutPathApp(_)
       with HasPrinter {
       echo(s"output basename: ${out.basename}")

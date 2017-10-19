@@ -1,5 +1,7 @@
 package org.hammerlab.cli.app
 
+import org.hammerlab.cli.app.close.{ Closeable, CloseableProxy }
+
 abstract class App[Opts](protected val _args: Args[Opts])(
     implicit val container: Closeable
 )

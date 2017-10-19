@@ -6,7 +6,7 @@ import org.hammerlab.cli.args.Parser
 import org.hammerlab.test
 
 /**
- * Simple [[App]], [[Main]], and [[test.Suite]] for an [[IndexingApp]] that sums some numbers and writes the result to a
+ * Simple [[App]], [[Runner]], and [[test.Suite]] for an [[IndexingApp]] that sums some numbers and writes the result to a
  * file.
  */
 class IndexingAppTest
@@ -47,10 +47,10 @@ class IndexingAppTest
 }
 
 object IndexingAppTest
-  extends AppContainer {
+  extends Cmd {
   case class Opts(@O("f") overwrite: Boolean = false)
 
-  val main = AppMain(
+  val main = Main(
     new IndexingApp("sum", _) {
       import org.hammerlab.io.Printer._
       import cats.implicits.catsStdShowForInt
