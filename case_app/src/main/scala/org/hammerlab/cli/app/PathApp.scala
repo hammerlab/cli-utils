@@ -1,6 +1,5 @@
 package org.hammerlab.cli.app
 
-import org.hammerlab.cli.app.OutPathApp._
 import org.hammerlab.cli.app.close.Closeable
 import org.hammerlab.paths.Path
 

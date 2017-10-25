@@ -2,7 +2,7 @@ package org.hammerlab.cli.app
 
 import org.hammerlab.cli.app.HasPrintLimit.PrintLimit
 import org.hammerlab.cli.app.OutPathApp.HasOverwrite
-import org.hammerlab.io.{ Printer, SampleSize }
+import org.hammerlab.io.{ CanPrint, Printer, SampleSize }
 import org.hammerlab.paths.Path
 import org.hammerlab.shapeless.record.Find
 import shapeless.{ Witness ⇒ W }
@@ -11,7 +11,8 @@ import shapeless.{ Witness ⇒ W }
  * Interface for [[App]]s that print to an output [[Path]], if one is provided, otherwise to stdout
  */
 trait HasPrinter
-  extends OutPathApp {
+  extends OutPathApp
+    with CanPrint {
 
   self: App[_] ⇒
 

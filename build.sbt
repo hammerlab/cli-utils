@@ -22,9 +22,9 @@ lazy val case_app = project.settings(
   version := "2.0.0-SNAPSHOT",
   deps ++= Seq(
     dep.case_app,
-    io % "2.0.0",
+    io % "2.1.0",
     paths % "1.3.1",
-    hammerlab("shapeless-utils") % "1.0.1-SNAPSHOT"
+    hammerlab("shapeless-utils") % "1.0.1"
   ),
   testDeps ++= Seq(
     cats,

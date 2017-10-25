@@ -17,7 +17,9 @@ case class Runner[Opts: MakeApp](
 
   def apply(args: Arg*): Unit = main(args.map(_.toString).toArray)
 
-  override def run(opts: Opts, args: RemainingArgs): Unit =
+  override def run(opts: Opts, args: RemainingArgs): Unit = apply(opts, args)
+
+  def apply(opts: Opts, args: RemainingArgs): Unit =
     try {
       val app =
         MakeApp(

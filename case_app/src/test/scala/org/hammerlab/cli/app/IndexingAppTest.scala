@@ -2,7 +2,6 @@ package org.hammerlab.cli.app
 
 import caseapp.{ ExtraName ⇒ O }
 import org.hammerlab.cli.app.IndexingAppTest._
-import org.hammerlab.cli.args.Parser
 import org.hammerlab.test
 
 /**
@@ -52,7 +51,6 @@ object IndexingAppTest
 
   val main = Main(
     new IndexingApp("sum", _) {
-      import org.hammerlab.io.Printer._
       import cats.implicits.catsStdShowForInt
       echo(
         path

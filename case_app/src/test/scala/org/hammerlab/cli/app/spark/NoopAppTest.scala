@@ -3,7 +3,6 @@ package org.hammerlab.cli.app.spark
 import org.hammerlab.cli.app.Cmd
 import org.hammerlab.cli.app.{ App, MainSuite }
 import org.hammerlab.cli.args.PrintLimitArgs
-import org.hammerlab.io.Printer.echo
 
 class NoopAppTest
   extends MainSuite(NoopAppTest) {
