@@ -53,7 +53,7 @@ object TestCommand
     "spark.kryoserializer.buffer" → "8mb"
   )
 
-  override def registrar = classOf[TestRegistrar]
+  registrar[TestRegistrar]
 
   override def run(args: TestArgs, sc: SparkContext): Unit = {
     val conf = sc.getConf

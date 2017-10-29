@@ -1,34 +1,25 @@
 package org.hammerlab.cli.app
 
-import caseapp.core.Messages
-import caseapp.{ CaseApp, Parser, RemainingArgs }
-import grizzled.slf4j.Logging
+import org.hammerlab.cli.app.close.{ Closeable, CloseableProxy }
 
-abstract class App[Args : Parser : Messages]
-  extends CaseApp[Args]
-    with Logging {
+abstract class App[Opts](protected val _args: Args[Opts])(
+    implicit val container: Closeable
+)
+  extends CloseableProxy
+    with Serializable {
 
-  final override def run(options: Args, remainingArgs: RemainingArgs): Unit =
-    remainingArgs match {
-      case RemainingArgs(args, Nil) ⇒
-        run(
-          options,
-          args
-        )
-      case RemainingArgs(args, unparsed) ⇒
-        throw new IllegalArgumentException(
-          s"Unparsed arguments: ${unparsed.mkString(" ")}"
-        )
-    }
+  implicit protected val opts = _args.opts
+  implicit protected val _iargs: Args[Opts] = _args
 
-  def done(): Unit = {}
-
-  final def run(options: Args, remainingArgs: Seq[String]): Unit =
-    try {
-      _run(options, remainingArgs)
-    } finally {
-      done()
-    }
-
-  protected def _run(options: Args, remainingArgs: Seq[String]): Unit
+  /**
+   * Optionally wrap functionality in this method, if e.g. this [[App]] is expected to be serialized and some
+   * things shouldn't run on a deserialized version.
+   *
+   * For example: code referencing a [[org.apache.spark.SparkContext]] shouldn't re-run in an [[App]] instance
+   * that's been sent to a Spark executor as part of a task closure).
+   *
+   * An example of logic to *not* wrap in [[run]] is implicit fields that are to be automatically in-scope in
+   * subclasses.
+   */
+  def run(): Unit = {}
 }
