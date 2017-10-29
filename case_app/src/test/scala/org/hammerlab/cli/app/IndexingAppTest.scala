@@ -1,6 +1,6 @@
 package org.hammerlab.cli.app
 
-import caseapp.{ ExtraName ⇒ O }
+import caseapp.{ Name ⇒ O }
 import org.hammerlab.cli.app.IndexingAppTest._
 import org.hammerlab.test
 
