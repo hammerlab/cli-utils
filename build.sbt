@@ -19,7 +19,7 @@ lazy val args4j = project.settings(
 lazy val case_app = project.settings(
   defaults,
   name := "case-app",
-  version := "2.0.0-SNAPSHOT",
+  version := "2.0.0",
   deps ++= Seq(
     dep.case_app,
     io % "2.1.0",
