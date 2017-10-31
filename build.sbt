@@ -11,7 +11,7 @@ import Parent.{ autoImport ⇒ dep }
 
 lazy val args4j = project.settings(
   defaults,
-  version := "1.1.1-SNAPSHOT",
+  version := "1.2.0-SNAPSHOT",
   deps += bdg_utils_cli % "0.3.0",
   testDeps += dep.args4j
 )
@@ -24,7 +24,7 @@ lazy val case_app = project.settings(
     dep.case_app,
     io % "2.1.0",
     paths % "1.3.1",
-    hammerlab("shapeless-utils") % "1.0.1"
+    shapeless_utils % "1.0.1"
   ),
   testDeps ++= Seq(
     cats,
