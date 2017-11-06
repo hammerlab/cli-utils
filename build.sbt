@@ -19,16 +19,16 @@ lazy val args4j = project.settings(
 lazy val case_app = project.settings(
   defaults,
   name := "case-app",
-  version := "2.0.0",
+  version := "2.1.0-SNAPSHOT",
   deps ++= Seq(
     dep.case_app,
-    io % "2.1.0",
+    io % "3.0.0",
     paths % "1.3.1",
     shapeless_utils % "1.0.1"
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "3.1.0"
+    magic_rdds % "4.0.0-SNAPSHOT"
   ),
   publishTestJar  // MainSuite is useful in downstream libraries' tests
 )
