@@ -11,7 +11,7 @@ import Parent.{ autoImport ⇒ dep }
 
 lazy val args4j = project.settings(
   defaults,
-  version := "1.2.0-SNAPSHOT",
+  version := "1.2.0",
   deps += bdg_utils_cli % "0.3.0",
   testDeps += dep.args4j
 )
@@ -19,7 +19,7 @@ lazy val args4j = project.settings(
 lazy val case_app = project.settings(
   defaults,
   name := "case-app",
-  version := "2.1.0-SNAPSHOT",
+  version := "2.1.0",
   deps ++= Seq(
     dep.case_app,
     io % "3.0.0",
