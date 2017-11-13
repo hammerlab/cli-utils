@@ -28,7 +28,7 @@ lazy val case_app = project.settings(
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.0.0-SNAPSHOT"
+    magic_rdds % "4.0.0"
   ),
   publishTestJar  // MainSuite is useful in downstream libraries' tests
 )
