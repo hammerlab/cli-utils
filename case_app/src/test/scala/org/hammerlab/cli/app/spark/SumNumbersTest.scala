@@ -1,9 +1,9 @@
 package org.hammerlab.cli.app.spark
 
 import caseapp.Recurse
+import magic_rdds._
 import org.hammerlab.cli.app.{ App, Cmd, HasPrintLimit, MainSuite, Runner }
 import org.hammerlab.cli.args.PrintLimitArgs
-import org.hammerlab.magic.rdd.SampleRDD._
 
 class SumNumbersTest
   extends MainSuite(SumNumbers) {
