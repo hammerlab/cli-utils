@@ -1,8 +1,8 @@
 package org.hammerlab.cli.app
 
+import hammerlab.path._
 import org.hammerlab.cli.app.OutPathApp.{ GetOutPath, HasOutPath }
 import org.hammerlab.cli.app.close.Closeable
-import org.hammerlab.paths.Path
 import org.hammerlab.shapeless.record.Find
 import shapeless.Witness
 

@@ -1,9 +1,10 @@
 package org.hammerlab.cli.app
 
+import hammerlab.indent._
+import hammerlab.path._
+import hammerlab.print._
 import org.hammerlab.cli.app.HasPrintLimit.PrintLimit
 import org.hammerlab.cli.app.OutPathApp.HasOverwrite
-import org.hammerlab.io.{ CanPrint, Printer, SampleSize }
-import org.hammerlab.paths.Path
 import org.hammerlab.shapeless.record.Find
 import shapeless.{ Witness ⇒ W }
 
@@ -17,6 +18,8 @@ trait HasPrinter
   self: App[_] ⇒
 
   @transient private var _printer: Printer = _
+
+  protected implicit val _indent = tab
 
   /**
    * Lazily construct and cache a [[Printer]] in the presence of evidence that [[Opts]] has an `overwrite: Boolean`
@@ -38,7 +41,7 @@ trait HasPrinter
               s"Output path $path exists and 'overwrite' not set"
             )
           case _ ⇒
-            Printer(outPath)
+            Printer(outPath)(_indent)
         }
 
       deinit {
