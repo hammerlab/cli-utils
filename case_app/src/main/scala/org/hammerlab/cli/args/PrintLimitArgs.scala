@@ -1,7 +1,7 @@
 package org.hammerlab.cli.args
 
 import caseapp.{ Recurse, ValueDescription, HelpMessage ⇒ M, Name ⇒ O }
-import org.hammerlab.io.SampleSize
+import hammerlab.print.SampleSize
 
 case class PrinterArgs(
     @O("f")

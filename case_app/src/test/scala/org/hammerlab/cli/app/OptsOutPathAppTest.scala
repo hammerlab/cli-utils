@@ -23,7 +23,6 @@ object OptsOutPath extends Cmd {
   val main = Main(
     new OptsOutPathApp(_)
       with HasPrinter {
-      import org.hammerlab.io.Printer._
       echo("yay")
     }
   )

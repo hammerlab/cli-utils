@@ -1,8 +1,6 @@
 package org.hammerlab.cli.app
 
-import org.hammerlab.cli.app.Cmd.With
 import org.hammerlab.cli.args.PrinterArgs
-import org.hammerlab.io.Printer._
 
 class RequiredArgOutPathAppTest
   extends MainSuite(RequiredArgOutPathTest) {
