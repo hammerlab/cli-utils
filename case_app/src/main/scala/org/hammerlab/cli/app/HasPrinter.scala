@@ -5,6 +5,7 @@ import hammerlab.path._
 import hammerlab.print._
 import org.hammerlab.cli.app.HasPrintLimit.PrintLimit
 import org.hammerlab.cli.app.OutPathApp.HasOverwrite
+import org.hammerlab.io.print.StreamPrinter
 import org.hammerlab.shapeless.record.Find
 import shapeless.{ Witness ⇒ W }
 
@@ -17,7 +18,7 @@ trait HasPrinter
 
   self: App[_] ⇒
 
-  @transient private var _printer: Printer = _
+  @transient private var _printer: StreamPrinter = _
 
   protected implicit val _indent = tab
 
