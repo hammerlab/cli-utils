@@ -1,34 +1,36 @@
 
+import Parent.{ autoImport ⇒ p }
+
 val defaults = Seq(
   organization := "org.hammerlab.cli",
-  deps ++= Seq(
+  dep(
     slf4j,
     spark_util % "2.0.1"
   )
 ) ++ addSparkDeps
 
-import Parent.{ autoImport ⇒ dep }
-
 lazy val args4j = project.settings(
   defaults,
-  version := "1.2.0",
-  deps += bdg_utils_cli % "0.3.0",
-  testDeps += dep.args4j
+  r"1.2.0",
+  dep(
+    bdg_utils_cli % "0.3.0",
+    p.args4j tests
+  )
 )
 
 lazy val case_app = project.settings(
   defaults,
   name := "case-app",
-  version := "2.2.0-SNAPSHOT",
-  deps ++= Seq(
-    dep.case_app,
-    io % "4.0.0-SNAPSHOT",
-    paths % "1.4.0",
+  v"2.2.0",
+  dep(
+    p.case_app,
+    io              % "4.0.0" snapshot,
+    paths           % "1.4.0",
     shapeless_utils % "1.1.0"
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.1.0-SNAPSHOT"
+    magic_rdds % "4.1.0" snapshot
   ),
   publishTestJar  // MainSuite is useful in downstream libraries' tests
 )

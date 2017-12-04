@@ -3,11 +3,7 @@ package org.hammerlab.cli.app
 import hammerlab.indent._
 import hammerlab.path._
 import hammerlab.print._
-import org.hammerlab.cli.app.HasPrintLimit.PrintLimit
 import org.hammerlab.cli.app.OutPathApp.HasOverwrite
-import org.hammerlab.io.print.StreamPrinter
-import org.hammerlab.shapeless.record.Find
-import shapeless.{ Witness ⇒ W }
 
 /**
  * Interface for [[App]]s that print to an output [[Path]], if one is provided, otherwise to stdout
@@ -17,8 +13,6 @@ trait HasPrinter
     with CanPrint {
 
   self: App[_] ⇒
-
-  @transient private var _printer: StreamPrinter = _
 
   protected implicit val _indent = tab
 
@@ -52,27 +46,5 @@ trait HasPrinter
 
     _printer
   }
-}
-
-
-/**
- * Mix-in for [[HasPrinter]] [[App]]s that may set an optional cap on how many items should be output from potentially
- * large collections (e.g. [[org.apache.spark.rdd.RDD]]s).
- */
-trait HasPrintLimit
-  extends HasPrinter {
-  self: App[_] ⇒
-  private var _printLimit: SampleSize = _
-  implicit def printLimit[Opts](implicit
-                                args: Args[Opts],
-                                select: PrintLimit[Opts]): SampleSize = {
-    if (_printLimit == null)
-      _printLimit = select(args)
-
-    _printLimit
-  }
-}
-
-object HasPrintLimit {
-  type PrintLimit[Opts] = Find[Opts, W.`'printLimit`.T, SampleSize]
+  @transient private var _printer: Printer = _
 }
