@@ -24,13 +24,13 @@ lazy val case_app = project.settings(
   v"2.2.0",
   dep(
     p.case_app,
-    io              % "4.0.0" snapshot,
+    io              % "4.0.0",
     paths           % "1.4.0",
     shapeless_utils % "1.1.0"
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.1.0" snapshot
+    magic_rdds % "4.1.0"
   ),
   publishTestJar  // MainSuite is useful in downstream libraries' tests
 )
