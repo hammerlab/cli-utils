@@ -21,7 +21,7 @@ lazy val args4j = project.settings(
 lazy val case_app = project.settings(
   defaults,
   name := "case-app",
-  v"2.2.0",
+  r"2.2.0",
   dep(
     p.case_app,
     io              % "4.0.0",
