@@ -1,6 +1,7 @@
 package org.hammerlab.cli.app.spark
 
 import caseapp.Recurse
+import hammerlab.lines.limit._
 import magic_rdds._
 import org.hammerlab.cli.app.{ App, Cmd, HasPrintLimit, MainSuite, Runner }
 import org.hammerlab.cli.args.PrintLimitArgs
@@ -78,11 +79,13 @@ object SumNumbers extends Cmd {
 
       val sampledInts = rdd.sample(count)
 
-      print(
-        sampledInts,
-        count,
-        s"$count numbers:",
-        n ⇒ s"$n of $count numbers:"
+      echo(
+        Limited(
+          sampledInts,
+          count,
+          s"$count numbers:",
+          s"$limit of $count numbers:"
+        )
       )
 
       echo(

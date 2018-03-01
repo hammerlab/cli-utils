@@ -13,7 +13,7 @@ case class Runner[Opts: MakeApp](
     c: Closeable,
     parse: Parser[Opts]
 )
-  extends CaseApp[Opts]()(parse, parse.messages) {
+  extends CaseApp[Opts]()(parse, parse.help) {
 
   def apply(args: Arg*): Unit = main(args.map(_.toString).toArray)
 
@@ -25,7 +25,7 @@ case class Runner[Opts: MakeApp](
         MakeApp(
           Args(
             opts,
-            args.remainingArgs
+            args.remaining
           )
         )
 
