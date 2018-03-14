@@ -1,6 +1,6 @@
 package org.hammerlab.cli.app
 
-import hammerlab.print._
+import hammerlab.lines.limit._
 import org.hammerlab.cli.app.HasPrintLimit.PrintLimit
 import org.hammerlab.shapeless.record.Find
 import shapeless.{ Witness ⇒ W }
@@ -12,17 +12,17 @@ import shapeless.{ Witness ⇒ W }
 trait HasPrintLimit
   extends HasPrinter {
   self: App[_] ⇒
-  private var _printLimit: SampleSize = _
-  implicit def printLimit[Opts](implicit
-                                args: Args[Opts],
-                                select: PrintLimit[Opts]): SampleSize = {
-    if (_printLimit == null)
-      _printLimit = select(args)
+  private var _limit: Limit = _
+  implicit def limit[Opts](implicit
+                           args: Args[Opts],
+                           select: PrintLimit[Opts]): Limit = {
+    if (_limit == null)
+      _limit = select(args)
 
-    _printLimit
+    _limit
   }
 }
 
 object HasPrintLimit {
-  type PrintLimit[Opts] = Find[Opts, W.`'printLimit`.T, SampleSize]
+  type PrintLimit[Opts] = Find[Opts, W.`'printLimit`.T, Limit]
 }
