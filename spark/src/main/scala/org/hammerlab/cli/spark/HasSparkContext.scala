@@ -1,10 +1,10 @@
 package org.hammerlab.cli.spark
 
 import grizzled.slf4j.Logging
+import hammerlab.cli.App
+import hammerlab.path._
 import org.apache.spark.SparkContext
-import org.hammerlab.cli.base.app.App
 import org.hammerlab.hadoop.Configuration
-import org.hammerlab.paths.Path
 import org.hammerlab.spark.{ SparkConfBase, confs }
 
 trait HasSparkConf

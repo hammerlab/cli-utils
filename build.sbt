@@ -1,14 +1,12 @@
 
-import Parent.{ autoImport ⇒ p }
-
 build(
-  group("org.hammerlab.cli"),
+  subgroup("cli"),
   v"1.0.0",
   versions(
-    io_utils → "5.0.0",
-    paths → "1.5.0",
+           io_utils → "5.0.0",
+              paths → "1.5.0",
     shapeless_utils → "1.2.0",
-    spark_util → "2.0.4".snapshot
+         spark_util → "2.0.4"
   )
 )
 
@@ -26,9 +24,7 @@ lazy val base = project.settings(
 lazy val spark = project.settings(
   dep(
     case_app,
-    io_utils,
     paths,
-    shapeless_utils,
     slf4j,
     spark_util
   ),

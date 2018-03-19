@@ -1,6 +1,7 @@
 package org.hammerlab.cli.base.args
 
-import caseapp.{ Recurse, ValueDescription, HelpMessage ⇒ M, Name ⇒ O }
+import caseapp.ValueDescription
+import hammerlab.cli._
 import hammerlab.lines.limit._
 
 case class PrinterArgs(
@@ -10,7 +11,7 @@ case class PrinterArgs(
 )
 
 case class PrintLimitArgs(
-    @Recurse printerArgs: PrinterArgs,
+    @R printerArgs: PrinterArgs,
 
     @O("l")
     @ValueDescription("num=1000000")

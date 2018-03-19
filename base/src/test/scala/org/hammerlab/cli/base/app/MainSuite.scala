@@ -5,9 +5,10 @@ import org.hammerlab.test.matchers.lines.Line
 import org.hammerlab.test.resources.File
 import org.scalatest.matchers.Matcher
 
-abstract class MainSuite(protected val appContainer: Cmd)
-  extends hammerlab.test.Suite {
+trait MainSuiteI {
+  self: hammerlab.test.Suite ⇒
 
+  protected val appContainer: Cmd
   protected val main = appContainer.main
 
   def outBasename: String = ""
@@ -67,3 +68,7 @@ abstract class MainSuite(protected val appContainer: Cmd)
     actual(outPath) should matcher
   }
 }
+
+abstract class MainSuite(protected val appContainer: Cmd)
+  extends hammerlab.test.Suite
+    with MainSuiteI

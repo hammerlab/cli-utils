@@ -1,10 +1,8 @@
 package org.hammerlab.cli.spark
 
-import caseapp.Recurse
+import hammerlab.cli._
 import hammerlab.lines.limit._
 import magic_rdds._
-import org.hammerlab.cli.base.app.{ App, Cmd, HasPrintLimit, Runner }
-import org.hammerlab.cli.base.args.PrintLimitArgs
 
 class SumNumbersTest
   extends MainSuite(SumNumbers) {
@@ -60,7 +58,7 @@ class SumNumbersTest
  */
 object SumNumbers extends Cmd {
 
-  case class Opts(@Recurse output: PrintLimitArgs)
+  case class Opts(@R output: PrintLimitArgs)
 
   val main = Main(
     new PathApp(_) {
