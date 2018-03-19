@@ -2,33 +2,33 @@
 import Parent.{ autoImport ⇒ p }
 
 build(
-  organization := "org.hammerlab.cli",
+  group("org.hammerlab.cli"),
+  v"1.0.0",
   versions(
-    spark_util → "2.0.3"
+    io_utils → "5.0.0",
+    paths → "1.5.0",
+    shapeless_utils → "1.2.0",
+    spark_util → "2.0.4".snapshot
   )
 )
 
-
-lazy val args4j = project.settings(
-  r"1.2.0",
+lazy val base = project.settings(
+  scalaVersion := scala211Version.value,
   dep(
-    bdg_utils_cli % "0.3.0",
-    p.args4j tests,
-    slf4j,
-    spark_util
-  ),
-  addSparkDeps
+    case_app,
+    io_utils,
+    paths,
+    shapeless,
+    shapeless_utils
+  )
 )
 
-lazy val case_app = project.settings(
-  name := "case-app",
-  v"2.3.0",
-  addSparkDeps,
+lazy val spark = project.settings(
   dep(
-    p.case_app,
-    io_utils        % "5.0.0",
-    paths           % "1.5.0",
-    shapeless_utils % "1.2.0",
+    case_app,
+    io_utils,
+    paths,
+    shapeless_utils,
     slf4j,
     spark_util
   ),
@@ -36,14 +36,17 @@ lazy val case_app = project.settings(
     cats,
     magic_rdds % "4.2.0"
   ),
+  addSparkDeps,
   publishTestJar  // MainSuite is useful in downstream libraries' tests
+).dependsOn(
+  base andTest
 )
 
-lazy val cli_root =
+lazy val root =
   rootProject(
     "cli-root",
-    args4j,
-    case_app
+    base,
+    spark
   )
 
 github.repo("spark-commands")
