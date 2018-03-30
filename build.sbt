@@ -1,5 +1,5 @@
 
-build(
+default(
   subgroup("cli"),
   v"1.0.0",
   versions(
@@ -7,18 +7,20 @@ build(
               paths → "1.5.0",
     shapeless_utils → "1.2.0",
          spark_util → "2.0.4"
-  )
+  ),
+  scala211Only
 )
 
 lazy val base = project.settings(
-  scalaVersion := scala211Version.value,
+  addScala212,
   dep(
     case_app,
     io_utils,
     paths,
     shapeless,
     shapeless_utils
-  )
+  ),
+  publishTestJar  // `MainSuite` is useful in downstream libraries' tests
 )
 
 lazy val spark = project.settings(
@@ -30,10 +32,10 @@ lazy val spark = project.settings(
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.2.0"
+    magic_rdds % "4.2.1"
   ),
   addSparkDeps,
-  publishTestJar  // MainSuite is useful in downstream libraries' tests
+  publishTestJar  // `MainSuite` is useful in downstream libraries' tests
 ).dependsOn(
   base andTest
 )

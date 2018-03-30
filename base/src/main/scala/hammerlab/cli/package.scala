@@ -1,9 +1,14 @@
 package hammerlab
 
+import org.hammerlab.caseapp.{ annotations, parsers }
 import org.hammerlab.cli.base._
 
-package object cli {
+package object cli
+  extends annotations
+    with parsers {
+
   type Cmd = app.Cmd
+   val Cmd = app.Cmd
 
   type                   App[Opts] = app.                  App[Opts]
   type               PathApp[Opts] = app.              PathApp[Opts]
@@ -17,7 +22,5 @@ package object cli {
   type PrinterArgs = args.PrinterArgs
   type PrintLimitArgs = args.PrintLimitArgs
 
-  type M = caseapp.HelpMessage
-  type R = caseapp.Recurse
-  type O = caseapp.Name
+  object parsers extends parsers
 }
