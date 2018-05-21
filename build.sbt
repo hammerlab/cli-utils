@@ -5,7 +5,7 @@ default(
   versions(
            io_utils → "5.0.0",
               paths → "1.5.0",
-    shapeless_utils → "1.2.0",
+    shapeless_utils → "1.3.0",
          spark_util → "2.0.4"
   ),
   scala211Only
@@ -40,9 +40,8 @@ lazy val spark = project.settings(
   base andTest
 )
 
-lazy val root =
+lazy val `cli-root` =
   rootProject(
-    "cli-root",
     base,
     spark
   )
