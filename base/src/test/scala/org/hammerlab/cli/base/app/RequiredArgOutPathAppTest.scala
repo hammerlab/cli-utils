@@ -14,10 +14,13 @@ class RequiredArgOutPathAppTest
   }
 
   test("missing out path") {
-    intercept[IllegalArgumentException] {
-      main(tmpPath())
-    }
-    .getMessage should be("Expected at least two arguments (input and output paths)")
+    ==(
+      intercept[IllegalArgumentException] {
+        main(tmpPath())
+      }
+      .getMessage,
+      "Expected at least two arguments (input and output paths)"
+    )
   }
 
   override def outBasename = "foo"

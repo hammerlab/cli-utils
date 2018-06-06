@@ -6,9 +6,9 @@ import org.hammerlab.test.Suite
 class DeinitTest
   extends Suite {
   test("verify") {
-    DeinitTest.deinitd should be(false)
+    ==(DeinitTest.deinitd, false)
     DeinitTest.main(tmpPath())
-    DeinitTest.deinitd should be(true)
+    ==(DeinitTest.deinitd, true)
   }
 }
 

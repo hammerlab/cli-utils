@@ -3,16 +3,16 @@ default(
   subgroup("cli"),
   v"1.0.0",
   versions(
-           io_utils → "5.0.0",
+       hammerlab.io → "5.1.0",
               paths → "1.5.0",
     shapeless_utils → "1.3.0",
          spark_util → "2.0.4"
   ),
-  scala211Only
+  `2.11`.only
 )
 
 lazy val base = project.settings(
-  addScala212,
+  `2.12`.add,
   dep(
     case_app,
     io_utils,
@@ -41,9 +41,9 @@ lazy val spark = project.settings(
 )
 
 lazy val `cli-root` =
-  rootProject(
+  root(
     base,
     spark
   )
 
-github.repo("spark-commands")
+github.repo("cli-utils")

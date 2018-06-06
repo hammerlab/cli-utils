@@ -3,11 +3,11 @@ package org.hammerlab.cli.base.close
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * Mix-in allowing registration of shutdown/de-initialization callbacks via [[Closeable.deinit]]
+ * Mix-in allowing registration of shutdown/de-initialization callbacks via `deinit`
  */
 trait Closeable
   extends java.io.Closeable
-    with Serializable {
+     with Serializable {
   private val deinitializations = ArrayBuffer[() ⇒ Unit]()
   def deinit(fn: ⇒ Unit): Unit = {
     deinitializations += (() ⇒ fn)
