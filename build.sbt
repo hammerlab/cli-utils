@@ -3,7 +3,7 @@ default(
   subgroup("cli"),
   v"1.0.0",
   versions(
-       hammerlab.io → "5.1.0",
+       hammerlab.io → "5.1.1",
               paths → "1.5.0",
     shapeless_utils → "1.3.0",
          spark_util → "2.0.4"
@@ -15,7 +15,7 @@ lazy val base = project.settings(
   `2.12`.add,
   dep(
     case_app,
-    io_utils,
+    hammerlab.io,
     paths,
     shapeless,
     shapeless_utils
@@ -32,9 +32,9 @@ lazy val spark = project.settings(
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.2.1"
+    magic_rdds % "4.2.2"
   ),
-  addSparkDeps,
+  Spark.autoImport.spark,
   publishTestJar  // `MainSuite` is useful in downstream libraries' tests
 ).dependsOn(
   base andTest
