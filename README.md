@@ -1,17 +1,38 @@
-# spark-commands
+# cli-utils
 
 [![Build Status](https://travis-ci.org/hammerlab/spark-commands.svg?branch=master)](https://travis-ci.org/hammerlab/spark-commands)
 [![Coverage Status](https://coveralls.io/repos/github/hammerlab/spark-commands/badge.svg)](https://coveralls.io/github/hammerlab/spark-commands)
 
-Interfaces for creating CLI-runnable and testable commands/apps, with [Spark](http://spark.apache.org/)-based and non-Spark flavors.
+Interfaces for creating CLI-runnable and testable commands/apps, with [Spark](http://spark.apache.org/)- and non-Spark-focused modules.
 
-## args4j
-[![Maven Central](https://img.shields.io/maven-central/v/org.hammerlab.cli/args4j_2.11.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Chammerlab%20args4j)
+## base
+[![Maven Central](https://img.shields.io/maven-central/v/org.hammerlab.cli/base_2.12.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Chammerlab.cli%20base)
+
+Wrappers and extensions to [case-app]:
+
+```scala
+libraryDependencies += "org.hammerlab.cli" %% "base" % "1.0.0"
+```
+
+```scala
+import hammerlab.cli._
+```
+
+See [examples in tests](base/src/test/scala/org/hammerlab/cli/base/app/IndexingAppTest.scala).
+
+## spark
+[![Maven Central](https://img.shields.io/maven-central/v/org.hammerlab.cli/spark_2.11.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Chammerlab.cli%20spark)
 
 
-## case-app
-[![Maven Central](https://img.shields.io/maven-central/v/org.hammerlab.cli/case-app_2.11.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Chammerlab%20case-app)
+```scala
+libraryDependencies += "org.hammerlab.cli" %% "spark" % "1.0.0"
+```
+
+```scala
+import hammerlab.cli.spark._
+```
+
+See [examples in tests](spark/src/test/scala/org/hammerlab/cli/spark/SumNumbersTest.scala).
 
 
-
-
+[case-app]: https://github.com/alexarchambault/case-app

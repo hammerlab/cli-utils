@@ -1,49 +1,49 @@
 
-import Parent.{ autoImport ⇒ p }
-
-build(
-  organization := "org.hammerlab.cli",
+default(
+  subgroup("cli"),
+  v"1.0.0",
   versions(
-    spark_util → "2.0.3"
-  )
-)
-
-
-lazy val args4j = project.settings(
-  r"1.2.0",
-  dep(
-    bdg_utils_cli % "0.3.0",
-    p.args4j tests,
-    slf4j,
-    spark_util
+       hammerlab.io → "5.1.1",
+              paths → "1.5.0",
+    shapeless_utils → "1.3.0",
+         spark_util → "2.0.4"
   ),
-  addSparkDeps
+  `2.11`.only
 )
 
-lazy val case_app = project.settings(
-  name := "case-app",
-  v"2.3.0",
-  addSparkDeps,
+lazy val base = project.settings(
+  `2.12`.add,
   dep(
-    p.case_app,
-    io_utils        % "5.0.0",
-    paths           % "1.5.0",
-    shapeless_utils % "1.2.0",
+    case_app,
+    hammerlab.io,
+    paths,
+    shapeless,
+    shapeless_utils
+  ),
+  publishTestJar  // `MainSuite` is useful in downstream libraries' tests
+)
+
+lazy val spark = project.settings(
+  dep(
+    case_app,
+    paths,
     slf4j,
     spark_util
   ),
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.2.0"
+    magic_rdds % "4.2.2"
   ),
-  publishTestJar  // MainSuite is useful in downstream libraries' tests
+  Spark.autoImport.spark,
+  publishTestJar  // `MainSuite` is useful in downstream libraries' tests
+).dependsOn(
+  base andTest
 )
 
-lazy val cli_root =
-  rootProject(
-    "cli-root",
-    args4j,
-    case_app
+lazy val `cli-root` =
+  root(
+    base,
+    spark
   )
 
-github.repo("spark-commands")
+github.repo("cli-utils")
