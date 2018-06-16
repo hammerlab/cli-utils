@@ -5,8 +5,8 @@ import org.hammerlab.cli.base.close._
 abstract class App[Opts](protected val _args: Args[Opts])(
   implicit val container: Closeable
 )
-  extends CloseableProxy
-     with Serializable {
+extends CloseableProxy
+   with Serializable {
 
   implicit protected val opts = _args.opts
   implicit protected val _iargs: Args[Opts] = _args

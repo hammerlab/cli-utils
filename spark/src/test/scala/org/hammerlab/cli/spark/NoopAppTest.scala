@@ -1,6 +1,6 @@
 package org.hammerlab.cli.spark
 
-import org.hammerlab.cli.base.app.{ App, Cmd }
+import org.hammerlab.cli.base.app.Cmd
 import org.hammerlab.cli.base.args.PrintLimitArgs
 
 class NoopAppTest
@@ -15,7 +15,7 @@ class NoopAppTest
 }
 
 /**
- * [[App]] that exercises some error and no-op code paths.
+ * [[PathApp]] that exercises some error and no-op code paths.
  */
 object NoopAppTest
   extends Cmd.With[PrintLimitArgs] {

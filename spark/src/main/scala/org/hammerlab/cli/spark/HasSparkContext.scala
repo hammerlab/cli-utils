@@ -1,7 +1,7 @@
 package org.hammerlab.cli.spark
 
 import grizzled.slf4j.Logging
-import hammerlab.cli.App
+import hammerlab.cli
 import hammerlab.path._
 import org.apache.spark.SparkContext
 import org.hammerlab.hadoop.Configuration
@@ -18,7 +18,7 @@ trait HasSparkContext
   extends HasSparkConf
     with Logging {
 
-  self: App[_] ⇒
+  self: cli.App[_] ⇒
 
   @transient private var _sc: SparkContext = _
 
