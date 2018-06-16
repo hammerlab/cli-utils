@@ -20,12 +20,14 @@ class ParsersTest
       parser(None, "1,2.3,4.56"),
       Right(Array(1, 2.3, 4.56))
     )
+
     ==(
       parser(None, "1,2.a"),
       Left(
         MalformedValue("double float", "2.a")
       )
     )
+
     ==(
       parser(None, "1,2.a,3.4,d"),
       Left(

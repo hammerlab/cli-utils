@@ -6,7 +6,7 @@ default(
        hammerlab.io → "5.1.1",
               paths → "1.5.0",
     shapeless_utils → "1.3.0",
-         spark_util → "2.0.4"
+         spark_util → "3.0.0"
   ),
   `2.11`.only
 )
@@ -20,8 +20,11 @@ lazy val base = project.settings(
     shapeless,
     shapeless_utils
   ),
+  emptyDocJar,  // compiling tests for docs causes compiler stack-overflow in scala 2.12 😔
   publishTestJar  // `MainSuite` is useful in downstream libraries' tests
 )
+
+import Spark.autoImport.{ spark ⇒ sprk }
 
 lazy val spark = project.settings(
   dep(
@@ -30,11 +33,11 @@ lazy val spark = project.settings(
     slf4j,
     spark_util
   ),
+  sprk,
   testDeps ++= Seq(
     cats,
-    magic_rdds % "4.2.2"
+    magic_rdds % "4.2.3"
   ),
-  Spark.autoImport.spark,
   publishTestJar  // `MainSuite` is useful in downstream libraries' tests
 ).dependsOn(
   base andTest
