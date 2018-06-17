@@ -1,11 +1,12 @@
 package org.hammerlab.cli.spark
 
-import org.hammerlab.cli.base.app.{ App, Cmd }
+import org.hammerlab.cli.base
+import org.hammerlab.cli.base.app.Cmd
 import org.hammerlab.cli.base.args.PrintLimitArgs
 import org.hammerlab.kryo.spark
 
 /**
- * [[App]] that sets various configuration options and verifies their propagation.
+ * [[base.app.App]] that sets various configuration options and verifies their propagation.
  */
 object ConfigTest
   extends Cmd.With[PrintLimitArgs] {

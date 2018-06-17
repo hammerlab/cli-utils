@@ -24,10 +24,10 @@ object OutPathApp {
  * [[App]] superclass where the second argument is the output path to write to; default: stdout
  */
 abstract class ArgsOutPathApp[Opts](args: Args[Opts])(
-    implicit c: Closeable
+  implicit c: Closeable
 )
-  extends PathApp[Opts](args)
-    with OutPathApp {
+extends PathApp[Opts](args)
+   with OutPathApp {
   override implicit val outPath =
     if (args.size > 1)
       Some(
@@ -69,10 +69,10 @@ abstract class RequiredArgOutPathApp[Opts](args: Args[Opts])(
  * field named `outPath` of type [[Option]][[Path]]
  */
 abstract class OptsOutPathApp[Opts: HasOutPath](args: Args[Opts])(
-    implicit c: Closeable
+  implicit c: Closeable
 )
-  extends PathApp[Opts](args)
-    with OutPathApp {
+extends PathApp[Opts](args)
+   with OutPathApp {
   override implicit val outPath = GetOutPath(args)
 }
 

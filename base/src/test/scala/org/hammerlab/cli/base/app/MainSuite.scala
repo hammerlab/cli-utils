@@ -47,7 +47,7 @@ trait MainSuiteI {
       be(expected.stripMargin)
     )
 
-  def run(args: Seq[Arg]): Path = {
+  def run(args: Arg*): Path = {
     val outPath =
       if (outBasename.nonEmpty)
         tmpPath(outBasename)
@@ -64,7 +64,7 @@ trait MainSuiteI {
   }
 
   def shouldMatch[T](args: Seq[Arg], actual: Path ⇒ T, matcher: Matcher[T]): Unit = {
-    val outPath = run(args)
+    val outPath = run(args: _*)
     actual(outPath) should matcher
   }
 }
