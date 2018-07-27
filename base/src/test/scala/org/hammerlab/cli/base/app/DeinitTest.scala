@@ -6,8 +6,14 @@ import org.hammerlab.test.Suite
 class DeinitTest
   extends Suite {
   test("verify") {
-    ==(DeinitTest.deinitd, false)
+    DeinitTest.deinitd = false
     DeinitTest.main(tmpPath())
+    ==(DeinitTest.deinitd, true)
+  }
+
+  test("main() wrapper") {
+    DeinitTest.deinitd = false
+    DeinitTest.main(Array(tmpPath().toString))
     ==(DeinitTest.deinitd, true)
   }
 }

@@ -20,6 +20,7 @@ lazy val base = project.settings(
     shapeless,
     shapeless_utils
   ),
+  travisCoverageScalaVersion := Some(`2.11`.version.value),
   emptyDocJar,  // compiling tests for docs causes compiler stack-overflow in scala 2.12 😔
   publishTestJar  // `MainSuite` is useful in downstream libraries' tests
 )
