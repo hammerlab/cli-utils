@@ -18,6 +18,10 @@ trait Cmd {
   /** Subclasses should instantiate an [[Main]] with a [[MakeApp]] */
   def main: Main
 
+  def main(args: Array[String]): Unit = {
+    main.main(args)
+  }
+
   /** Contained [[App]]s will register shutdown callbacks herein */
   implicit val closeable = Closeable()
 

@@ -1,7 +1,7 @@
 
 default(
   subgroup("cli"),
-  v"1.0.0",
+  v"1.0.1",
   versions(
        hammerlab.io → "5.1.1",
               paths → "1.5.0",
