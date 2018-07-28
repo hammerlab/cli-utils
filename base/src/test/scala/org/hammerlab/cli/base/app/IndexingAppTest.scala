@@ -27,9 +27,8 @@ class IndexingAppTest
         outPath
       )
     }
-    .getMessage should fullyMatch regex(
+    .getMessage should fullyMatch regex
       """Output path .* exists and 'overwrite' not set""".r
-    )
   }
 
   test("outPath exists - overwrite") {

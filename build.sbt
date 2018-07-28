@@ -3,7 +3,7 @@ default(
   subgroup("cli"),
   v"1.0.1",
   versions(
-       hammerlab.io → "5.1.1",
+       hammerlab.io → "5.2.0",
               paths → "1.5.0",
     shapeless_utils → "1.3.0",
          spark_util → "3.0.0"

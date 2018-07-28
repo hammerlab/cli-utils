@@ -1,5 +1,6 @@
 package org.hammerlab.cli.base.app
 
+import hammerlab.option._
 import hammerlab.path._
 import org.hammerlab.cli.base.app.OutPathApp.{ GetOutPath, HasOutPath }
 import org.hammerlab.cli.base.close.Closeable
@@ -29,14 +30,7 @@ abstract class ArgsOutPathApp[Opts](args: Args[Opts])(
 extends PathApp[Opts](args)
    with OutPathApp {
   override implicit val outPath =
-    if (args.size > 1)
-      Some(
-        Path(
-          args(1)
-        )
-      )
-    else
-      None
+    (args.size > 1) ? Path(args(1))
 }
 
 trait RequiredOutPath

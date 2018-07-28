@@ -2,14 +2,14 @@ package org.hammerlab.cli.base.app
 
 import org.hammerlab.cli.base.close._
 
-abstract class App[Opts](protected val _args: Args[Opts])(
+abstract class App[Opts](protected val args: Args[Opts])(
   implicit val container: Closeable
 )
 extends CloseableProxy
    with Serializable {
 
-  implicit protected val opts = _args.opts
-  implicit protected val _iargs: Args[Opts] = _args
+  implicit protected val opts = args.opts
+  implicit protected val _iargs: Args[Opts] = args
 
   /**
    * Optionally wrap functionality in this method, if e.g. this [[App]] is expected to be serialized and some

@@ -32,9 +32,7 @@ trait HasPrinter
           case Some(path)
             if path.exists &&
               !overwrite ⇒
-            throw new IllegalArgumentException(
-              s"Output path $path exists and 'overwrite' not set"
-            )
+              throw OutPathExists(path)
           case _ ⇒
             Printer(outPath)(_indent)
         }
@@ -48,3 +46,8 @@ trait HasPrinter
   }
   @transient private var _printer: Printer = _
 }
+
+case class OutPathExists(path: Path)
+  extends IllegalArgumentException(
+    s"Output path $path exists and 'overwrite' not set"
+  )

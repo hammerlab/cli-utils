@@ -12,12 +12,12 @@ import org.hammerlab.paths.Path
  *               "." –  to the argument [[PathApp.path input path]].
  */
 case class IndexingApp[Opts : Parser](suffix: String,
-                                      args: Args[Opts])(
+                                      override val args: Args[Opts])(
     implicit c: Closeable
 )
-  extends PathApp[Opts](args)
-    with OutPathApp
-    with HasPrinter {
+extends PathApp[Opts](args)
+   with OutPathApp
+   with HasPrinter {
   override def outPath: Option[Path] =
     Some(
       if (args.length > 1)

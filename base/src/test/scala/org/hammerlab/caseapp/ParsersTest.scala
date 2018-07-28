@@ -8,6 +8,19 @@ import hammerlab.cli._
 class ParsersTest
   extends Suite {
 
+  test("seq") {
+    val parser = implicitly[ArgParser[Seq[Double]]]
+    ==(
+      parser(None, "1,2.3,4.56"),
+      Right(Seq(1, 2.3, 4.56))
+    )
+
+    ==(
+      parser(None, "1,2.3,4.56"),
+      Right(Seq(1, 2.3, 4.56))
+    )
+  }
+
   test("array") {
     val parser = implicitly[ArgParser[Array[Double]]]
 

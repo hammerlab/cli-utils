@@ -1,5 +1,6 @@
 package org.hammerlab.cli.base.app
 
+import caseapp.core.RemainingArgs
 import org.hammerlab.cli.base.args.PrinterArgs
 import org.hammerlab.test.Suite
 
@@ -11,9 +12,22 @@ class DeinitTest
     ==(DeinitTest.deinitd, true)
   }
 
-  test("main() wrapper") {
+  test("main() wrappers") {
     DeinitTest.deinitd = false
-    DeinitTest.main(Array(tmpPath().toString))
+    val args = Array(tmpPath().toString)
+    DeinitTest.main(args)
+    ==(DeinitTest.deinitd, true)
+
+    DeinitTest.deinitd = false
+    DeinitTest.main(
+      PrinterArgs(),
+      RemainingArgs(
+        Seq(
+          tmpPath().toString
+        ),
+        Nil
+      )
+    )
     ==(DeinitTest.deinitd, true)
   }
 }

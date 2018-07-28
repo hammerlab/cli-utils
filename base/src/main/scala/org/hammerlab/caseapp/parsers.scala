@@ -33,18 +33,18 @@ trait parsers {
         )
     }
 
-  implicit def seqParser[T: ClassTag, I[_] <: Iterable[_]](implicit
-                                                           p: ArgParser[Array[T]],
-                                                           ev: I[T] <:< Iterable[T],
-                                                           cbf: CanBuildFrom[Array[T], T, I[T]]): ArgParser[I[T]] =
+  implicit def seqParser[T, I[_] <: Iterable[_]](implicit
+                                                 p: ArgParser[Array[T]],
+                                                 ev: I[T] <:< Iterable[T],
+                                                 cbf: CanBuildFrom[Array[T], T, I[T]]): ArgParser[I[T]] =
     SimpleArgParser.from("elements") {
       p(
         None,
         _
       )
-      .map(
-        cbf(_)
-          .result()
-      )
+      .map {
+        elems ⇒
+          (cbf() ++= elems) result
+      }
     }
 }
