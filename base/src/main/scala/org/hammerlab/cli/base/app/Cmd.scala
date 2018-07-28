@@ -18,7 +18,9 @@ trait Cmd {
   /** Subclasses should instantiate an [[Main]] with a [[MakeApp]] */
   def main: Main
 
-  /** Contained [[App]]s will register shutdown callbacks herein */
+  def main(args: Array[String]): Unit = main.main(args)
+
+  /** Contained [[App]]s can register shutdown callbacks here */
   implicit val closeable = Closeable()
 
   /**
@@ -43,7 +45,7 @@ trait Cmd {
    */
   object Main {
     def apply(_mkApp: MakeApp)(
-        implicit parser: Parser[Opts]
+      implicit parser: Parser[Opts]
     ): Main =
       new Main {
         override val mkApp = _mkApp
@@ -65,7 +67,4 @@ object Cmd {
     extends app.Cmd {
     type Opts = _Opts
   }
-
-  implicit def toRunner(cmd: Cmd): Runner[cmd.Opts] = cmd.main
 }
-

@@ -9,11 +9,14 @@ import org.hammerlab.cli.base.close.Closeable
  * Wrap a [[MakeApp]] function in a full command-line-callable main() / [[CaseApp]]
  */
 case class Runner[Opts: MakeApp](
-    implicit
-    c: Closeable,
-    parse: Parser[Opts]
+  implicit
+  c: Closeable,
+  parse: Parser[Opts]
 )
-  extends CaseApp[Opts]()(parse, parse.help) {
+extends CaseApp[Opts]()(
+  // these should both get picked up implicitly, but they're not
+  parse, parse
+) {
 
   def apply(args: Arg*): Unit = main(args.map(_.toString).toArray)
 

@@ -1,6 +1,6 @@
 # cli-utils
 
-[![Build Status](https://travis-ci.org/hammerlab/spark-commands.svg?branch=master)](https://travis-ci.org/hammerlab/spark-commands)
+[![Build Status](https://travis-ci.org/hammerlab/cli-utils.svg?branch=master)](https://travis-ci.org/hammerlab/spark-commands)
 [![Coverage Status](https://coveralls.io/repos/github/hammerlab/spark-commands/badge.svg)](https://coveralls.io/github/hammerlab/spark-commands)
 
 Interfaces for creating CLI-runnable and testable commands/apps, with [Spark](http://spark.apache.org/)- and non-Spark-focused modules.
@@ -11,7 +11,7 @@ Interfaces for creating CLI-runnable and testable commands/apps, with [Spark](ht
 Wrappers and extensions to [case-app]:
 
 ```scala
-libraryDependencies += "org.hammerlab.cli" %% "base" % "1.0.0"
+libraryDependencies += "org.hammerlab.cli" %% "base" % "1.0.1"
 ```
 
 ```scala
@@ -25,7 +25,7 @@ See [examples in tests](base/src/test/scala/org/hammerlab/cli/base/app/IndexingA
 
 
 ```scala
-libraryDependencies += "org.hammerlab.cli" %% "spark" % "1.0.0"
+libraryDependencies += "org.hammerlab.cli" %% "spark" % "1.0.1"
 ```
 
 ```scala
