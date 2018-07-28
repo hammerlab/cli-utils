@@ -1,7 +1,7 @@
 # cli-utils
 
 [![Build Status](https://travis-ci.org/hammerlab/cli-utils.svg?branch=master)](https://travis-ci.org/hammerlab/spark-commands)
-[![Coverage Status](https://coveralls.io/repos/github/hammerlab/spark-commands/badge.svg)](https://coveralls.io/github/hammerlab/spark-commands)
+[![codecov](https://codecov.io/gh/hammerlab/cli-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/hammerlab/cli-utils)
 
 Interfaces for creating CLI-runnable and testable commands/apps, with [Spark](http://spark.apache.org/)- and non-Spark-focused modules.
 
